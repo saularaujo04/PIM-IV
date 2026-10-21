@@ -1,4 +1,5 @@
-﻿using Transportadora.Domain;
+﻿using Transportadora.Application.DTOs;
+using Transportadora.Domain;
 using Transportadora.Domain.Interfaces;
 
 namespace Transportadora.Application.Services;
@@ -24,6 +25,18 @@ public class EntregaService
 
     public async Task AdicionarAsync(Entrega entrega)
     {
+        await _repository.AdicionarAsync(entrega);
+    }
+
+    public async Task AdicionarAsync(CriarEntregaDto dto)
+    {
+        var entrega = new Entrega(
+            dto.CodigoRastreio,
+            dto.ClienteId,
+            dto.MotoristaId,
+            dto.EnderecoOrigem,
+            dto.EnderecoDestino);
+
         await _repository.AdicionarAsync(entrega);
     }
 
