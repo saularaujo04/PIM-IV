@@ -1,15 +1,33 @@
+using Microsoft.EntityFrameworkCore;
+using Transportadora.Application.Services;
+using Transportadora.Domain.Interfaces;
+using Transportadora.Infrastructure;
+using Transportadora.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Serviços da API
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Banco de dados em memória
+builder.Services.AddDbContext<TransportadoraDbContext>(options =>
+{
+    options.UseInMemoryDatabase("TransportadoraDB");
+});
+
+// Repositórios
+builder.Services.AddScoped<IEntregaRepository, EntregaRepository>();
+
+// Serviços da aplicação
+builder.Services.AddScoped<EntregaService>();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
