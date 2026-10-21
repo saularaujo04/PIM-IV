@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Transportadora.Application.DTOs;
 using Transportadora.Application.Services;
-using Transportadora.Domain;
 
 namespace Transportadora.API.Controllers;
 
@@ -24,6 +23,17 @@ public class EntregasController : ControllerBase
         return Ok(entregas);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> ObterPorId(int id)
+    {
+        var entrega = await _service.ObterPorIdAsync(id);
+
+        if (entrega is null)
+            return NotFound();
+
+        return Ok(entrega);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Criar(
         [FromBody] CriarEntregaDto dto)
@@ -34,5 +44,47 @@ public class EntregasController : ControllerBase
         {
             Mensagem = "Entrega cadastrada com sucesso."
         });
+    }
+
+    [HttpPost("{id}/iniciar-rota")]
+    public async Task<IActionResult> IniciarRota(int id)
+    {
+        try
+        {
+            await _service.IniciarRotaAsync(id);
+
+            return Ok(new
+            {
+                Mensagem = "Rota iniciada com sucesso."
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                Mensagem = ex.Message
+            });
+        }
+    }
+
+    [HttpPost("{id}/concluir")]
+    public async Task<IActionResult> ConcluirEntrega(int id)
+    {
+        try
+        {
+            await _service.ConcluirEntregaAsync(id);
+
+            return Ok(new
+            {
+                Mensagem = "Entrega concluída com sucesso."
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                Mensagem = ex.Message
+            });
+        }
     }
 }
