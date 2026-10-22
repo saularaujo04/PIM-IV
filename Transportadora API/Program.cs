@@ -1,33 +1,21 @@
 using Microsoft.EntityFrameworkCore;
-using Transportadora.Application.Services;
-using Transportadora.Domain.Interfaces;
-using Transportadora.Infrastructure;
-using Transportadora.Infrastructure.Repositories;
+using Transportadora.Infrastructure; // Adicione o namespace de onde está o seu DbContext
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Serviços da API
+// Adiciona os serviços de Controller e Swagger (padrão da API)
 builder.Services.AddControllers();
-
-// Banco de dados em memória
-builder.Services.AddDbContext<TransportadoraDbContext>(options =>
-{
-    options.UseInMemoryDatabase("TransportadoraDB");
-});
-
-// Repositórios
-builder.Services.AddScoped<IEntregaRepository, EntregaRepository>();
-
-// Serviços da aplicação
-builder.Services.AddScoped<EntregaService>();
-
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// INÍCIO DO PASSO 2 - Injeção do Banco de Dados
+builder.Services.AddDbContext<TransportadoraDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// FIM DO PASSO 2
+
 var app = builder.Build();
 
-// Pipeline HTTP
+// Configura o pipeline de requisições HTTP (Swagger etc)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,9 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
