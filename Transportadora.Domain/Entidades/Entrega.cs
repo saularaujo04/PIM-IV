@@ -11,7 +11,12 @@ public class Entrega : EntidadeBase
 
     protected Entrega() { }
 
-    public Entrega(string codigoRastreio, int clienteId, int motoristaId, string enderecoOrigem, string enderecoDestino)
+    public Entrega(
+        string codigoRastreio,
+        int clienteId,
+        int motoristaId,
+        string enderecoOrigem,
+        string enderecoDestino)
     {
         CodigoRastreio = codigoRastreio;
         ClienteId = clienteId;
@@ -24,18 +29,33 @@ public class Entrega : EntidadeBase
     public void IniciarRota()
     {
         if (Status != StatusEntrega.Pendente)
-            throw new InvalidOperationException("Apenas entregas pendentes podem ser iniciadas.");
+            throw new InvalidOperationException(
+                "Apenas entregas pendentes podem ser iniciadas.");
 
         Status = StatusEntrega.EmTransito;
+
         RegistrarAtualizacao();
     }
 
     public void ConcluirEntrega()
     {
         if (Status != StatusEntrega.EmTransito)
-            throw new InvalidOperationException("A entrega precisa estar em trânsito para ser concluída.");
+            throw new InvalidOperationException(
+                "A entrega precisa estar em trânsito para ser concluída.");
 
         Status = StatusEntrega.Concluida;
+
+        RegistrarAtualizacao();
+    }
+
+    public void RegistrarOcorrencia()
+    {
+        if (Status == StatusEntrega.Concluida)
+            throw new InvalidOperationException(
+                "Não é possível registrar ocorrência em uma entrega concluída.");
+
+        Status = StatusEntrega.Ocorrencia;
+
         RegistrarAtualizacao();
     }
 }

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Enums\StatusEntrega.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Enums\" />
   </ItemGroup>
 

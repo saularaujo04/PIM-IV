@@ -5,19 +5,23 @@ namespace Transportadora.Infrastructure;
 
 public class TransportadoraDbContext : DbContext
 {
-    // Construtor que recebe as opções de conexão da API
-    public TransportadoraDbContext(DbContextOptions<TransportadoraDbContext> options) : base(options)
+    public TransportadoraDbContext(
+        DbContextOptions<TransportadoraDbContext> options)
+        : base(options)
     {
     }
 
-    // Mapeia a entidade Entrega para a tabela "Entregas" no banco de dados
+    // Entregas
     public DbSet<Entrega> Entregas { get; set; }
+
+    // Ocorrências
+    public DbSet<OcorrenciaEntrega> Ocorrencias { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configurações e restrições da tabela Entregas
+        // Entrega
         modelBuilder.Entity<Entrega>()
             .HasKey(e => e.Id);
 
@@ -35,5 +39,14 @@ public class TransportadoraDbContext : DbContext
             .Property(e => e.EnderecoDestino)
             .IsRequired()
             .HasMaxLength(200);
+
+        // Ocorrência
+        modelBuilder.Entity<OcorrenciaEntrega>()
+            .HasKey(o => o.Id);
+
+        modelBuilder.Entity<OcorrenciaEntrega>()
+            .Property(o => o.Descricao)
+            .IsRequired()
+            .HasMaxLength(500);
     }
 }

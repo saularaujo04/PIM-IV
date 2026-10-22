@@ -7,10 +7,14 @@ namespace Transportadora.Application.Services;
 public class EntregaService
 {
     private readonly IEntregaRepository _repository;
+    private readonly IOcorrenciaRepository _ocorrenciaRepository;
 
-    public EntregaService(IEntregaRepository repository)
+    public EntregaService(
+        IEntregaRepository repository,
+        IOcorrenciaRepository ocorrenciaRepository)
     {
         _repository = repository;
+        _ocorrenciaRepository = ocorrenciaRepository;
     }
 
     public async Task<List<Entrega>> ObterTodasAsync()
@@ -61,6 +65,7 @@ public class EntregaService
 
         await _repository.AtualizarAsync(entrega);
     }
+
     public async Task ConcluirEntregaAsync(int id)
     {
         var entrega = await _repository.ObterPorIdAsync(id);
@@ -71,5 +76,30 @@ public class EntregaService
         entrega.ConcluirEntrega();
 
         await _repository.AtualizarAsync(entrega);
+    }
+
+    public async Task RegistrarOcorrenciaAsync(
+        int entregaId,
+        CriarOcorrenciaDto dto)
+    {
+        var entrega = await _repository.ObterPorIdAsync(entregaId);
+
+        if (entrega is null)
+            throw new Exception("Entrega não encontrada.");
+
+        entrega.RegistrarOcorrencia();
+
+        await _repository.AtualizarAsync(entrega);
+
+        var ocorrencia = new OcorrenciaEntrega(
+            entregaId,
+            dto.Descricao);
+
+        await _ocorrenciaRepository.AdicionarAsync(ocorrencia);
+    }
+
+    public async Task<List<OcorrenciaEntrega>> ObterOcorrenciasAsync(int entregaId)
+    {
+        return await _ocorrenciaRepository.ObterPorEntregaAsync(entregaId);
     }
 }

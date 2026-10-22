@@ -87,4 +87,36 @@ public class EntregasController : ControllerBase
             });
         }
     }
+
+    [HttpPost("{id}/ocorrencia")]
+    public async Task<IActionResult> RegistrarOcorrencia(
+        int id,
+        [FromBody] CriarOcorrenciaDto dto)
+    {
+        try
+        {
+            await _service.RegistrarOcorrenciaAsync(id, dto);
+
+            return Ok(new
+            {
+                Mensagem = "Ocorrência registrada com sucesso."
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                Mensagem = ex.Message
+            });
+        }
+    }
+
+    [HttpGet("{id}/ocorrencias")]
+    public async Task<IActionResult> ObterOcorrencias(int id)
+    {
+        var ocorrencias =
+            await _service.ObterOcorrenciasAsync(id);
+
+        return Ok(ocorrencias);
+    }
 }
