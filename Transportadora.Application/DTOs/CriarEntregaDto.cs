@@ -8,6 +8,8 @@ public class CriarEntregaDto
 
     public int MotoristaId { get; set; }
 
+    public int VeiculoId { get; set; } // Propriedade adicionada
+
     public string EnderecoOrigem { get; set; } = string.Empty;
 
     public string EnderecoDestino { get; set; } = string.Empty;

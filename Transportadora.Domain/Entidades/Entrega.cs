@@ -5,9 +5,15 @@ public class Entrega : EntidadeBase
     public string CodigoRastreio { get; private set; } = string.Empty;
     public int ClienteId { get; private set; }
     public int MotoristaId { get; private set; }
+    public int VeiculoId { get; private set; } // Adicionado
     public string EnderecoOrigem { get; private set; } = string.Empty;
     public string EnderecoDestino { get; private set; } = string.Empty;
     public StatusEntrega Status { get; private set; }
+
+    // Propriedades de Navegação (Para o Entity Framework gerenciar os relacionamentos)
+    public virtual Cliente? Cliente { get; private set; }
+    public virtual Motorista? Motorista { get; private set; }
+    public virtual Veiculo? Veiculo { get; private set; }
 
     protected Entrega() { }
 
@@ -15,12 +21,14 @@ public class Entrega : EntidadeBase
         string codigoRastreio,
         int clienteId,
         int motoristaId,
+        int veiculoId, // Adicionado
         string enderecoOrigem,
         string enderecoDestino)
     {
         CodigoRastreio = codigoRastreio;
         ClienteId = clienteId;
         MotoristaId = motoristaId;
+        VeiculoId = veiculoId;
         EnderecoOrigem = enderecoOrigem;
         EnderecoDestino = enderecoDestino;
         Status = StatusEntrega.Pendente;

@@ -34,10 +34,12 @@ public class EntregaService
 
     public async Task AdicionarAsync(CriarEntregaDto dto)
     {
+        // Aqui foi adicionado o dto.VeiculoId no construtor
         var entrega = new Entrega(
             dto.CodigoRastreio,
             dto.ClienteId,
             dto.MotoristaId,
+            dto.VeiculoId,
             dto.EnderecoOrigem,
             dto.EnderecoDestino);
 

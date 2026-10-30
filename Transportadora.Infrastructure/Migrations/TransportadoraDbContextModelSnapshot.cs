@@ -22,6 +22,41 @@ namespace Transportadora.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Transportadora.Domain.Cliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cnpj")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RazaoSocial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clientes");
+                });
+
             modelBuilder.Entity("Transportadora.Domain.Entrega", b =>
                 {
                     b.Property<int>("Id")
@@ -60,9 +95,53 @@ namespace Transportadora.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int>("VeiculoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("MotoristaId");
+
+                    b.HasIndex("VeiculoId");
+
                     b.ToTable("Entregas");
+                });
+
+            modelBuilder.Entity("Transportadora.Domain.Motorista", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoriaCnh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cnh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Motoristas");
                 });
 
             modelBuilder.Entity("Transportadora.Domain.OcorrenciaEntrega", b =>
@@ -87,6 +166,68 @@ namespace Transportadora.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ocorrencias");
+                });
+
+            modelBuilder.Entity("Transportadora.Domain.Veiculo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("CapacidadeKg")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modelo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Placa")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Veiculos");
+                });
+
+            modelBuilder.Entity("Transportadora.Domain.Entrega", b =>
+                {
+                    b.HasOne("Transportadora.Domain.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Transportadora.Domain.Motorista", "Motorista")
+                        .WithMany()
+                        .HasForeignKey("MotoristaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Transportadora.Domain.Veiculo", "Veiculo")
+                        .WithMany()
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Motorista");
+
+                    b.Navigation("Veiculo");
                 });
 #pragma warning restore 612, 618
         }

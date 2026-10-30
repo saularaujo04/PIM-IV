@@ -10,11 +10,12 @@ public class TransportadoraDbContext : DbContext
     {
     }
 
-    // Entregas
+    // Tabelas do Banco de Dados (DbSets)
     public DbSet<Entrega> Entregas { get; set; }
-
-    // Ocorrências
     public DbSet<OcorrenciaEntrega> Ocorrencias { get; set; }
+    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Motorista> Motoristas { get; set; }
+    public DbSet<Veiculo> Veiculos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -28,7 +29,9 @@ public class TransportadoraDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Entrega
+        // =======================
+        // Configuração: Entrega
+        // =======================
         modelBuilder.Entity<Entrega>()
             .HasKey(e => e.Id);
 
@@ -47,7 +50,28 @@ public class TransportadoraDbContext : DbContext
             .IsRequired()
             .HasMaxLength(200);
 
-        // Ocorrência
+        // Relacionamentos da Entrega (Chaves Estrangeiras)
+        modelBuilder.Entity<Entrega>()
+            .HasOne(e => e.Cliente)
+            .WithMany()
+            .HasForeignKey(e => e.ClienteId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Entrega>()
+            .HasOne(e => e.Motorista)
+            .WithMany()
+            .HasForeignKey(e => e.MotoristaId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Entrega>()
+            .HasOne(e => e.Veiculo)
+            .WithMany()
+            .HasForeignKey(e => e.VeiculoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // =======================
+        // Configuração: Ocorrência
+        // =======================
         modelBuilder.Entity<OcorrenciaEntrega>()
             .HasKey(o => o.Id);
 
@@ -55,5 +79,12 @@ public class TransportadoraDbContext : DbContext
             .Property(o => o.Descricao)
             .IsRequired()
             .HasMaxLength(500);
+
+        // =======================
+        // Configuração: Veiculo
+        // =======================
+        modelBuilder.Entity<Veiculo>()
+            .Property(v => v.CapacidadeKg)
+            .HasPrecision(10, 2);
     }
 }
