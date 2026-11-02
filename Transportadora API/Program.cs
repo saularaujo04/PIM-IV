@@ -22,9 +22,15 @@ builder.Services.AddDbContext<TransportadoraDbContext>(options =>
 // Repositórios
 builder.Services.AddScoped<IEntregaRepository, EntregaRepository>();
 builder.Services.AddScoped<IOcorrenciaRepository, OcorrenciaRepository>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IMotoristaRepository, MotoristaRepository>();
+builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
 // Services
 builder.Services.AddScoped<EntregaService>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<MotoristaService>();
+builder.Services.AddScoped<VeiculoService>();
 
 var app = builder.Build();
 
