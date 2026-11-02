@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entregas - Transportadora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="clientes.html">Logística PIM IV</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="clientes.html">Clientes</a>
+                <a class="nav-link" href="motoristas.html">Motoristas</a>
+                <a class="nav-link" href="veiculos.html">Veículos</a>
+                <a class="nav-link active" href="entregas.html">Entregas</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white font-weight-bold">Nova Entrega / Frete</div>
+                    <div class="card-body">
+                        <form id="formEntrega">
+                            <div class="mb-3">
+                                <label class="form-label">Cliente Contratante</label>
+                                <select id="clienteId" class="form-select" required>
+                                    <option value="">Selecione um Cliente...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Motorista Responsável</label>
+                                <select id="motoristaId" class="form-select" required>
+                                    <option value="">Selecione um Motorista...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Veículo da Frota</label>
+                                <select id="veiculoId" class="form-select" required>
+                                    <option value="">Selecione um Veículo...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Endereço de Origem</label>
+                                <input type="text" id="enderecoOrigem" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Endereço de Destino</label>
+                                <input type="text" id="enderecoDestino" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Registrar Entrega</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">Histórico de Entregas</div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Origem</th>
+                                    <th>Destino</th>
+                                    <th>Cliente ID</th>
+                                    <th>Motorista ID</th>
+                                    <th>Veículo ID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaEntregas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+            // @ts-nocheck
+            (function () {
+                const API_URL = 'https://localhost:7026/api/Clientes';
+
+                async function carregarDropdowns() {
+                    try {
+                        const resCli = await fetch(`${BASE_API}/Clientes`);
+                        const clientes = await resCli.json();
+                        const selectCli = document.getElementById('clienteId');
+                        if (selectCli) {
+                            clientes.forEach((c) => {
+                                selectCli.innerHTML += `<option value="${c.id}">${c.nome} (ID: ${c.id})</option>`;
+                            });
+                        }
+
+                        const resMot = await fetch(`${BASE_API}/Motoristas`);
+                        const motoristas = await resMot.json();
+                        const selectMot = document.getElementById('motoristaId');
+                        if (selectMot) {
+                            motoristas.forEach((m) => {
+                                selectMot.innerHTML += `<option value="${m.id}">${m.nome} (ID: ${m.id})</option>`;
+                            });
+                        }
+
+                        const resVei = await fetch(`${BASE_API}/Veiculos`);
+                        const veiculos = await resVei.json();
+                        const selectVei = document.getElementById('veiculoId');
+                        if (selectVei) {
+                            veiculos.forEach((v) => {
+                                selectVei.innerHTML += `<option value="${v.id}">${v.modelo} - ${v.placa}</option>`;
+                            });
+                        }
+                    } catch (err) {
+                        console.error('Erro ao carregar selects:', err);
+                    }
+                }
+
+                async function carregarEntregas() {
+                    try {
+                        const res = await fetch(`${BASE_API}/Entregas`);
+                        const entregas = await res.json();
+                        const tbody = document.getElementById('tabelaEntregas');
+                        if (!tbody) return;
+
+                        tbody.innerHTML = '';
+                        entregas.forEach((e) => {
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${e.id}</td>
+                                    <td>${e.enderecoOrigem}</td>
+                                    <td>${e.enderecoDestino}</td>
+                                    <td>${e.clienteId}</td>
+                                    <td>${e.motoristaId}</td>
+                                    <td>${e.veiculoId}</td>
+                                </tr>`;
+                        });
+                    } catch (err) {
+                        console.error('Erro ao carregar entregas:', err);
+                    }
+                }
+
+                const form = document.getElementById('formEntrega');
+                if (form) {
+                    form.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const entrega = {
+                            clienteId: parseInt(document.getElementById('clienteId').value),
+                            motoristaId: parseInt(document.getElementById('motoristaId').value),
+                            veiculoId: parseInt(document.getElementById('veiculoId').value),
+                            enderecoOrigem: document.getElementById('enderecoOrigem').value,
+                            enderecoDestino: document.getElementById('enderecoDestino').value
+                        };
+
+                        const res = await fetch(`${BASE_API}/Entregas`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(entrega)
+                        });
+
+                        if (res.ok) {
+                            alert('Entrega registrada com sucesso!');
+                            form.reset();
+                            carregarEntregas();
+                        } else {
+                            alert('Erro ao registrar entrega.');
+                        }
+                    });
+                }
+
+                carregarDropdowns();
+                carregarEntregas();
+            })();
+    </script>
+</body>
+</html>

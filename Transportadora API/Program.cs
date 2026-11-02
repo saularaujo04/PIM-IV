@@ -26,6 +26,16 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IMotoristaRepository, MotoristaRepository>();
 builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTudo", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // Services
 builder.Services.AddScoped<EntregaService>();
 builder.Services.AddScoped<ClienteService>();
@@ -42,7 +52,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("PermitirTudo");
+
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllers();
 
