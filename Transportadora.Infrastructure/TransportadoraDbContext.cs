@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Transportadora.Domain;
+using Transportadora.Domain.Entidades; // Ajustado para corresponder à sua namespace
 
 namespace Transportadora.Infrastructure;
 
@@ -16,6 +17,7 @@ public class TransportadoraDbContext : DbContext
     public DbSet<Cliente> Clientes { get; set; }
     public DbSet<Motorista> Motoristas { get; set; }
     public DbSet<Veiculo> Veiculos { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; } 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -86,5 +88,14 @@ public class TransportadoraDbContext : DbContext
         modelBuilder.Entity<Veiculo>()
             .Property(v => v.CapacidadeKg)
             .HasPrecision(10, 2);
+
+        // =======================
+        // Carga Inicial: Usuários
+        // =======================
+        modelBuilder.Entity<Usuario>().HasData(
+            new Usuario { Id = 1, Nome = "Administrador", Email = "admin@pim.com", Senha = "123", Perfil = "admin" },
+            new Usuario { Id = 2, Nome = "Operador Logístico", Email = "log@pim.com", Senha = "123", Perfil = "operador" },
+            new Usuario { Id = 3, Nome = "Motorista Principal", Email = "mot@pim.com", Senha = "123", Perfil = "motorista" }
+        );
     }
 }

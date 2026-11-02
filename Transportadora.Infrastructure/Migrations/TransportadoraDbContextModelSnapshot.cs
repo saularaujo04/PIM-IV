@@ -57,6 +57,61 @@ namespace Transportadora.Infrastructure.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("Transportadora.Domain.Entidades.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Perfil")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@pim.com",
+                            Nome = "Administrador",
+                            Perfil = "admin",
+                            Senha = "123"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "log@pim.com",
+                            Nome = "Operador Logístico",
+                            Perfil = "operador",
+                            Senha = "123"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "mot@pim.com",
+                            Nome = "Motorista Principal",
+                            Perfil = "motorista",
+                            Senha = "123"
+                        });
+                });
+
             modelBuilder.Entity("Transportadora.Domain.Entrega", b =>
                 {
                     b.Property<int>("Id")

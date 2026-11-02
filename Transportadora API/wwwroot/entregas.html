@@ -10,7 +10,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="clientes.html">Logística PIM IV</a>
+            <a class="navbar-brand fw-bold" href="index.html">Logística PIM IV</a>
             <div class="navbar-nav">
                 <a class="nav-link" href="clientes.html">Clientes</a>
                 <a class="nav-link" href="motoristas.html">Motoristas</a>
@@ -20,62 +20,65 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid px-4">
         <div class="row mb-4">
-            <div class="col-md-5">
+            <!-- Formulário de Nova Entrega -->
+            <div class="col-md-3">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white font-weight-bold">Nova Entrega / Frete</div>
+                    <div class="card-header bg-success text-white fw-bold">Nova Entrega</div>
                     <div class="card-body">
                         <form id="formEntrega">
-                            <div class="mb-3">
-                                <label class="form-label">Cliente Contratante</label>
-                                <select id="clienteId" class="form-select" required>
-                                    <option value="">Selecione um Cliente...</option>
+                            <div class="mb-2">
+                                <label class="form-label small">Cliente</label>
+                                <select id="clienteId" class="form-select form-select-sm" required>
+                                    <option value="">Selecione...</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Motorista Responsável</label>
-                                <select id="motoristaId" class="form-select" required>
-                                    <option value="">Selecione um Motorista...</option>
+                            <div class="mb-2">
+                                <label class="form-label small">Motorista</label>
+                                <select id="motoristaId" class="form-select form-select-sm" required>
+                                    <option value="">Selecione...</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Veículo da Frota</label>
-                                <select id="veiculoId" class="form-select" required>
-                                    <option value="">Selecione um Veículo...</option>
+                            <div class="mb-2">
+                                <label class="form-label small">Veículo</label>
+                                <select id="veiculoId" class="form-select form-select-sm" required>
+                                    <option value="">Selecione...</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Endereço de Origem</label>
-                                <input type="text" id="enderecoOrigem" class="form-control" required>
+                            <div class="mb-2">
+                                <label class="form-label small">Origem</label>
+                                <input type="text" id="enderecoOrigem" class="form-control form-control-sm" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Endereço de Destino</label>
-                                <input type="text" id="enderecoDestino" class="form-control" required>
+                                <label class="form-label small">Destino</label>
+                                <input type="text" id="enderecoDestino" class="form-control form-control-sm" required>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">Registrar Entrega</button>
+                            <button type="submit" class="btn btn-success btn-sm w-100">Registrar Entrega</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-7">
+            <!-- Tabela de Entregas com Ações -->
+            <div class="col-md-9">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white">Histórico de Entregas</div>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Origem</th>
-                                    <th>Destino</th>
-                                    <th>Cliente ID</th>
-                                    <th>Motorista ID</th>
-                                    <th>Veículo ID</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabelaEntregas"></tbody>
-                        </table>
+                    <div class="card-header bg-dark text-white fw-bold">Painel de Fretes e Status</div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Rota (Origem ➔ Destino)</th>
+                                        <th>Cliente ID</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Ações Rápidas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaEntregas"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,38 +88,29 @@
     <script>
             // @ts-nocheck
             (function () {
-                const API_URL = 'https://localhost:7026/api/Clientes';
+                const BASE_API = 'https://localhost:7026/api';
 
                 async function carregarDropdowns() {
                     try {
-                        const resCli = await fetch(`${BASE_API}/Clientes`);
+                        const [resCli, resMot, resVei] = await Promise.all([
+                            fetch(`${BASE_API}/Clientes`),
+                            fetch(`${BASE_API}/Motoristas`),
+                            fetch(`${BASE_API}/Veiculos`)
+                        ]);
+
                         const clientes = await resCli.json();
                         const selectCli = document.getElementById('clienteId');
-                        if (selectCli) {
-                            clientes.forEach((c) => {
-                                selectCli.innerHTML += `<option value="${c.id}">${c.nome} (ID: ${c.id})</option>`;
-                            });
-                        }
+                        if (selectCli) clientes.forEach(c => selectCli.innerHTML += `<option value="${c.id}">${c.nome}</option>`);
 
-                        const resMot = await fetch(`${BASE_API}/Motoristas`);
                         const motoristas = await resMot.json();
                         const selectMot = document.getElementById('motoristaId');
-                        if (selectMot) {
-                            motoristas.forEach((m) => {
-                                selectMot.innerHTML += `<option value="${m.id}">${m.nome} (ID: ${m.id})</option>`;
-                            });
-                        }
+                        if (selectMot) motoristas.forEach(m => selectMot.innerHTML += `<option value="${m.id}">${m.nome}</option>`);
 
-                        const resVei = await fetch(`${BASE_API}/Veiculos`);
                         const veiculos = await resVei.json();
                         const selectVei = document.getElementById('veiculoId');
-                        if (selectVei) {
-                            veiculos.forEach((v) => {
-                                selectVei.innerHTML += `<option value="${v.id}">${v.modelo} - ${v.placa}</option>`;
-                            });
-                        }
+                        if (selectVei) veiculos.forEach(v => selectVei.innerHTML += `<option value="${v.id}">${v.placa}</option>`);
                     } catch (err) {
-                        console.error('Erro ao carregar selects:', err);
+                        console.error('Erro ao carregar dropdowns:', err);
                     }
                 }
 
@@ -129,20 +123,43 @@
 
                         tbody.innerHTML = '';
                         entregas.forEach((e) => {
+                            // Define a cor do badge dependendo do status retornado (ajuste se sua API retornar nomes diferentes)
+                            let statusBadge = `<span class="badge bg-secondary">Pendente</span>`;
+                            if (e.status === 1 || e.status === 'EmRota') statusBadge = `<span class="badge bg-primary">Em Rota</span>`;
+                            if (e.status === 2 || e.status === 'Concluida') statusBadge = `<span class="badge bg-success">Concluída</span>`;
+
                             tbody.innerHTML += `
                                 <tr>
-                                    <td>${e.id}</td>
-                                    <td>${e.enderecoOrigem}</td>
-                                    <td>${e.enderecoDestino}</td>
+                                    <td><strong>#${e.id}</strong></td>
+                                    <td><small>${e.enderecoOrigem} <br>➔ ${e.enderecoDestino}</small></td>
                                     <td>${e.clienteId}</td>
-                                    <td>${e.motoristaId}</td>
-                                    <td>${e.veiculoId}</td>
+                                    <td>${statusBadge}</td>
+                                    <td class="text-center">
+                                        <button onclick="alterarStatus(${e.id}, 'iniciar-rota')" class="btn btn-sm btn-outline-primary" title="Iniciar Rota">▶ Iniciar</button>
+                                        <button onclick="alterarStatus(${e.id}, 'concluir')" class="btn btn-sm btn-outline-success" title="Concluir Entrega">✔ Concluir</button>
+                                    </td>
                                 </tr>`;
                         });
                     } catch (err) {
                         console.error('Erro ao carregar entregas:', err);
                     }
                 }
+
+                // Função global para ser chamada pelos botões HTML
+                window.alterarStatus = async function(id, acao) {
+                    if (!confirm(`Deseja realmente ${acao === 'concluir' ? 'concluir' : 'iniciar'} esta entrega?`)) return;
+
+                    try {
+                        const res = await fetch(`${BASE_API}/Entregas/${id}/${acao}`, { method: 'POST' });
+                        if (res.ok) {
+                            carregarEntregas(); // Recarrega a tabela para atualizar o badge de status
+                        } else {
+                            alert(`Não foi possível ${acao} a entrega. Verifique as regras no backend.`);
+                        }
+                    } catch (err) {
+                        console.error('Erro ao alterar status:', err);
+                    }
+                };
 
                 const form = document.getElementById('formEntrega');
                 if (form) {
@@ -163,7 +180,6 @@
                         });
 
                         if (res.ok) {
-                            alert('Entrega registrada com sucesso!');
                             form.reset();
                             carregarEntregas();
                         } else {

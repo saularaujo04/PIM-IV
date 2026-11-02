@@ -8,66 +8,140 @@
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.html">Logística PIM IV</a>
-            <div class="navbar-nav">
+
+            <div class="navbar-nav me-auto">
                 <a class="nav-link active" href="index.html">Home</a>
-                <a class="nav-link" href="clientes.html">Clientes</a>
-                <a class="nav-link" href="motoristas.html">Motoristas</a>
-                <a class="nav-link" href="veiculos.html">Veículos</a>
-                <a class="nav-link" href="entregas.html">Entregas</a>
+                <a class="nav-link item-permissao" id="navClientes" href="clientes.html">Clientes</a>
+                <a class="nav-link item-permissao" id="navMotoristas" href="motoristas.html">Motoristas</a>
+                <a class="nav-link item-permissao" id="navVeiculos" href="veiculos.html">Veículos</a>
+                <a class="nav-link item-permissao" id="navEntregas" href="entregas.html">Entregas</a>
+            </div>
+
+            <!-- Identificador de Perfil e Logout -->
+            <div class="d-flex align-items-center gap-3">
+                <span id="badgePerfil" class="badge fs-6 px-3 py-2"></span>
+                <button id="btnLogout" class="btn btn-outline-danger btn-sm">Sair</button>
             </div>
         </div>
     </nav>
 
-    <div class="container py-4">
-        <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow-sm">
-            <div class="container-fluid py-3">
-                <h1 class="display-5 fw-bold">Sistema de Gestão de Transportes</h1>
-                <p class="col-md-8 fs-4">Projeto PIM IV — Plataforma Web integrada via REST API com ASP.NET Core, Entity Framework Core e SQL Server.</p>
+    <div class="container py-3">
+        <!-- Banner de Boas-Vindas Dinâmico -->
+        <div class="p-4 mb-4 bg-dark text-white rounded-3 shadow-sm">
+            <div class="container-fluid py-2">
+                <h1 class="display-6 fw-bold" id="tituloBoasVindas">Painel Operacional</h1>
+                <p class="col-md-9 fs-5 text-secondary" id="subtituloBoasVindas">Selecione um módulo abaixo para gerenciar a operação.</p>
             </div>
         </div>
 
+        <!-- Grid de Cards Modulares -->
         <div class="row align-items-md-stretch g-4">
-            <div class="col-md-3">
+
+            <!-- Card Clientes -->
+            <div class="col-md-3 card-modulo" id="cardClientes">
                 <div class="h-100 p-4 bg-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Clientes</h4>
-                        <p class="text-muted">Cadastro e gestão dos contratantes de transporte.</p>
+                        <p class="text-muted small">Cadastro e gestão dos contratantes de transporte.</p>
                     </div>
                     <a href="clientes.html" class="btn btn-outline-primary w-100">Gerenciar Clientes</a>
                 </div>
             </div>
-            <div class="col-md-3">
+
+            <!-- Card Motoristas -->
+            <div class="col-md-3 card-modulo" id="cardMotoristas">
                 <div class="h-100 p-4 bg-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Motoristas</h4>
-                        <p class="text-muted">Controle da equipe de condutores e CNHs.</p>
+                        <p class="text-muted small">Controle da equipe de condutores e CNHs.</p>
                     </div>
                     <a href="motoristas.html" class="btn btn-outline-primary w-100">Gerenciar Motoristas</a>
                 </div>
             </div>
-            <div class="col-md-3">
+
+            <!-- Card Veículos -->
+            <div class="col-md-3 card-modulo" id="cardVeiculos">
                 <div class="h-100 p-4 bg-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Veículos</h4>
-                        <p class="text-muted">Gestão da frota e capacidade de carga em Kg.</p>
+                        <p class="text-muted small">Gestão da frota e capacidade de carga em Kg.</p>
                     </div>
                     <a href="veiculos.html" class="btn btn-outline-primary w-100">Gerenciar Veículos</a>
                 </div>
             </div>
-            <div class="col-md-3">
+
+            <!-- Card Entregas -->
+            <div class="col-md-3 card-modulo" id="cardEntregas">
                 <div class="h-100 p-4 bg-success text-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Entregas</h4>
-                        <p class="text-light">Emissão de fretes e controle de rotas de entrega.</p>
+                        <p class="text-light small">Emissão de fretes e controle de rotas de entrega.</p>
                     </div>
-                    <a href="entregas.html" class="btn btn-light text-success fw-bold w-100">Nova Entrega</a>
+                    <a href="entregas.html" class="btn btn-light text-success fw-bold w-100">Painel de Entregas</a>
                 </div>
             </div>
+
         </div>
     </div>
 
+    <script>// @ts-nocheck
+    (function () {
+        const perfil = localStorage.getItem('perfilAcesso');
+
+        // Se não estiver logado, força o redirecionamento
+        if (!perfil) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const badgePerfil = document.getElementById('badgePerfil');
+        const titulo = document.getElementById('tituloBoasVindas');
+        const subtitulo = document.getElementById('subtituloBoasVindas');
+
+        // Configurações de exibição de acordo com o perfil
+        if (perfil === 'admin') {
+            badgePerfil.className = 'badge bg-danger fs-6 px-3 py-2';
+            badgePerfil.innerText = 'Administrador';
+            titulo.innerText = 'Painel Administrativo';
+            subtitulo.innerText = 'Acesso total a todos os módulos do sistema.';
+        }
+        else if (perfil === 'operador') {
+            badgePerfil.className = 'badge bg-warning text-dark fs-6 px-3 py-2';
+            badgePerfil.innerText = 'Operador de Logística';
+            titulo.innerText = 'Painel de Operação';
+            subtitulo.innerText = 'Acesso ao controle de frota, motoristas e entregas.';
+
+            // Oculta acesso a Clientes
+            document.getElementById('navClientes').classList.add('d-none');
+            document.getElementById('cardClientes').classList.add('d-none');
+        }
+        else if (perfil === 'motorista') {
+            badgePerfil.className = 'badge bg-info text-dark fs-6 px-3 py-2';
+            badgePerfil.innerText = 'Motorista';
+            titulo.innerText = 'Minhas Rotas';
+            subtitulo.innerText = 'Acompanhe e atualize o status das suas entregas.';
+
+            // Oculta módulos administrativos e de frota
+            document.getElementById('navClientes').classList.add('d-none');
+            document.getElementById('cardClientes').classList.add('d-none');
+            document.getElementById('navMotoristas').classList.add('d-none');
+            document.getElementById('cardMotoristas').classList.add('d-none');
+            document.getElementById('navVeiculos').classList.add('d-none');
+            document.getElementById('cardVeiculos').classList.add('d-none');
+
+            // Ajusta o card de entregas para ocupar a tela inteira
+            const cardEntregas = document.getElementById('cardEntregas');
+            cardEntregas.className = 'col-md-12';
+        }
+
+        // Lógica de Logout
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            localStorage.removeItem('perfilAcesso');
+            window.location.href = 'login.html';
+        });
+    })();</script>
 </body>
 </html>
