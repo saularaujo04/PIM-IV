@@ -9,6 +9,7 @@
 <body class="bg-secondary bg-opacity-25 d-flex align-items-center" style="height: 100vh;">
 
     <div class="container">
+        <!-- O Card de Login continua igual... -->
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="card shadow border-0 rounded-3">
@@ -20,7 +21,7 @@
                         <form id="formLogin">
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">E-mail corporativo</label>
-                                <input type="email" id="email" class="form-control form-control-lg" placeholder="admin@pim.com" required>
+                                <input type="email" id="email" class="form-control form-control-lg" required>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label fw-semibold">Senha</label>
@@ -28,21 +29,44 @@
                             </div>
                             <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">Acessar Sistema</button>
                         </form>
-
-                        <div class="mt-4 pt-3 border-top text-center text-muted small">
-                            <p class="mb-1 fw-bold">Contas de teste (simulação):</p>
-                            <span>admin@pim.com (Total)</span><br>
-                            <span>log@pim.com (Operador)</span><br>
-                            <span>mot@pim.com (Motorista)</span>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- 1. CONTAINER DO TOAST (Aviso flutuante no canto superior direito) -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem">
+                    <!-- A mensagem vai aparecer aqui -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Importação do JavaScript do Bootstrap (Necessário para os Toasts funcionarem) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
             // @ts-nocheck
+
+            // 3. Função reutilizável para chamar o Toast
+            function mostrarToast(mensagem, corFundo) {
+                const toastEl = document.getElementById('toastNotificacao');
+                const toastMsg = document.getElementById('toastMensagem');
+
+                // Remove cores antigas e adiciona a nova (ex: bg-danger, bg-success)
+                toastEl.className = `toast align-items-center text-white border-0 ${corFundo}`;
+                toastMsg.textContent = mensagem;
+
+                // Dispara o Toast na tela
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+
             document.getElementById('formLogin').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
@@ -58,18 +82,16 @@
 
                     if (res.ok) {
                         const usuario = await res.json();
-
-                        // Salva a sessão autenticada diretamente pelo banco
                         localStorage.setItem('perfilAcesso', usuario.perfil);
                         localStorage.setItem('usuarioNome', usuario.nome);
-
                         window.location.href = 'index.html';
                     } else {
-                        alert('E-mail ou senha inválidos no SQL Server!');
+                        // 4. Substituímos o alert() pelo Toast vermelho (bg-danger)
+                        mostrarToast('E-mail ou senha inválidos!', 'bg-danger');
                     }
                 } catch (err) {
                     console.error('Erro de conexão:', err);
-                    alert('Não foi possível conectar à API de Autenticação.');
+                    mostrarToast('Não foi possível conectar ao servidor.', 'bg-dark');
                 }
             });
     </script>

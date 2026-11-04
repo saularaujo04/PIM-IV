@@ -38,110 +38,165 @@
         </div>
 
         <!-- Grid de Cards Modulares -->
-        <div class="row align-items-md-stretch g-4">
+        <div class="row align-items-md-stretch g-4 mb-5">
 
-            <!-- Card Clientes -->
             <div class="col-md-3 card-modulo" id="cardClientes">
                 <div class="h-100 p-4 bg-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Clientes</h4>
-                        <p class="text-muted small">Cadastro e gestão dos contratantes de transporte.</p>
+                        <p class="text-muted small">Cadastro e gestão dos contratantes.</p>
                     </div>
-                    <a href="clientes.html" class="btn btn-outline-primary w-100">Gerenciar Clientes</a>
+                    <a href="clientes.html" class="btn btn-outline-primary w-100">Acessar</a>
                 </div>
             </div>
 
-            <!-- Card Motoristas -->
             <div class="col-md-3 card-modulo" id="cardMotoristas">
                 <div class="h-100 p-4 bg-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Motoristas</h4>
-                        <p class="text-muted small">Controle da equipe de condutores e CNHs.</p>
+                        <p class="text-muted small">Controle da equipa e CNHs.</p>
                     </div>
-                    <a href="motoristas.html" class="btn btn-outline-primary w-100">Gerenciar Motoristas</a>
+                    <a href="motoristas.html" class="btn btn-outline-primary w-100">Acessar</a>
                 </div>
             </div>
 
-            <!-- Card Veículos -->
             <div class="col-md-3 card-modulo" id="cardVeiculos">
                 <div class="h-100 p-4 bg-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Veículos</h4>
-                        <p class="text-muted small">Gestão da frota e capacidade de carga em Kg.</p>
+                        <p class="text-muted small">Gestão da frota e capacidades.</p>
                     </div>
-                    <a href="veiculos.html" class="btn btn-outline-primary w-100">Gerenciar Veículos</a>
+                    <a href="veiculos.html" class="btn btn-outline-primary w-100">Acessar</a>
                 </div>
             </div>
 
-            <!-- Card Entregas -->
             <div class="col-md-3 card-modulo" id="cardEntregas">
                 <div class="h-100 p-4 bg-success text-white border rounded-3 shadow-sm text-center d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-3">Entregas</h4>
-                        <p class="text-light small">Emissão de fretes e controle de rotas de entrega.</p>
+                        <p class="text-light small">Controle de fretes e rotas.</p>
                     </div>
                     <a href="entregas.html" class="btn btn-light text-success fw-bold w-100">Painel de Entregas</a>
                 </div>
             </div>
-
         </div>
+
+        <!-- Secção do Gráfico (Dashboard) -->
+        <div class="row" id="seccaoDashboard">
+            <div class="col-md-8 mx-auto">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white fw-bold text-center border-bottom-0 pt-4">
+                        Status Geral das Entregas (Visão Geral)
+                    </div>
+                    <div class="card-body">
+                        <!-- O Canvas onde o Chart.js vai renderizar o gráfico -->
+                        <canvas id="graficoEntregas" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script>// @ts-nocheck
-    (function () {
-        const perfil = localStorage.getItem('perfilAcesso');
+    <!-- Script do Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        // Se não estiver logado, força o redirecionamento
-        if (!perfil) {
-            window.location.href = 'login.html';
-            return;
-        }
+    <script>
+            // @ts-nocheck
+            (function () {
+                const perfil = localStorage.getItem('perfilAcesso');
 
-        const badgePerfil = document.getElementById('badgePerfil');
-        const titulo = document.getElementById('tituloBoasVindas');
-        const subtitulo = document.getElementById('subtituloBoasVindas');
+                if (!perfil) {
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-        // Configurações de exibição de acordo com o perfil
-        if (perfil === 'admin') {
-            badgePerfil.className = 'badge bg-danger fs-6 px-3 py-2';
-            badgePerfil.innerText = 'Administrador';
-            titulo.innerText = 'Painel Administrativo';
-            subtitulo.innerText = 'Acesso total a todos os módulos do sistema.';
-        }
-        else if (perfil === 'operador') {
-            badgePerfil.className = 'badge bg-warning text-dark fs-6 px-3 py-2';
-            badgePerfil.innerText = 'Operador de Logística';
-            titulo.innerText = 'Painel de Operação';
-            subtitulo.innerText = 'Acesso ao controle de frota, motoristas e entregas.';
+                const badgePerfil = document.getElementById('badgePerfil');
+                const titulo = document.getElementById('tituloBoasVindas');
+                const subtitulo = document.getElementById('subtituloBoasVindas');
+                const seccaoDashboard = document.getElementById('seccaoDashboard');
 
-            // Oculta acesso a Clientes
-            document.getElementById('navClientes').classList.add('d-none');
-            document.getElementById('cardClientes').classList.add('d-none');
-        }
-        else if (perfil === 'motorista') {
-            badgePerfil.className = 'badge bg-info text-dark fs-6 px-3 py-2';
-            badgePerfil.innerText = 'Motorista';
-            titulo.innerText = 'Minhas Rotas';
-            subtitulo.innerText = 'Acompanhe e atualize o status das suas entregas.';
+                if (perfil === 'admin') {
+                    badgePerfil.className = 'badge bg-danger fs-6 px-3 py-2';
+                    badgePerfil.innerText = 'Administrador';
+                    titulo.innerText = 'Painel Administrativo';
+                    subtitulo.innerText = 'Acesso total a todos os módulos do sistema.';
+                }
+                else if (perfil === 'operador') {
+                    badgePerfil.className = 'badge bg-warning text-dark fs-6 px-3 py-2';
+                    badgePerfil.innerText = 'Operador de Logística';
+                    titulo.innerText = 'Painel de Operação';
+                    subtitulo.innerText = 'Acesso ao controle de frota, motoristas e entregas.';
 
-            // Oculta módulos administrativos e de frota
-            document.getElementById('navClientes').classList.add('d-none');
-            document.getElementById('cardClientes').classList.add('d-none');
-            document.getElementById('navMotoristas').classList.add('d-none');
-            document.getElementById('cardMotoristas').classList.add('d-none');
-            document.getElementById('navVeiculos').classList.add('d-none');
-            document.getElementById('cardVeiculos').classList.add('d-none');
+                    document.getElementById('navClientes').classList.add('d-none');
+                    document.getElementById('cardClientes').classList.add('d-none');
+                }
+                else if (perfil === 'motorista') {
+                    badgePerfil.className = 'badge bg-info text-dark fs-6 px-3 py-2';
+                    badgePerfil.innerText = 'Motorista';
+                    titulo.innerText = 'Minhas Rotas';
+                    subtitulo.innerText = 'Acompanhe e atualize o status das suas entregas.';
 
-            // Ajusta o card de entregas para ocupar a tela inteira
-            const cardEntregas = document.getElementById('cardEntregas');
-            cardEntregas.className = 'col-md-12';
-        }
+                    document.getElementById('navClientes').classList.add('d-none');
+                    document.getElementById('cardClientes').classList.add('d-none');
+                    document.getElementById('navMotoristas').classList.add('d-none');
+                    document.getElementById('cardMotoristas').classList.add('d-none');
+                    document.getElementById('navVeiculos').classList.add('d-none');
+                    document.getElementById('cardVeiculos').classList.add('d-none');
 
-        // Lógica de Logout
-        document.getElementById('btnLogout').addEventListener('click', () => {
-            localStorage.removeItem('perfilAcesso');
-            window.location.href = 'login.html';
-        });
-    })();</script>
+                    const cardEntregas = document.getElementById('cardEntregas');
+                    cardEntregas.className = 'col-md-12';
+
+                    // Motorista não precisa de ver o gráfico de gestão geral
+                    seccaoDashboard.classList.add('d-none');
+                }
+
+                document.getElementById('btnLogout').addEventListener('click', () => {
+                    localStorage.removeItem('perfilAcesso');
+                    window.location.href = 'login.html';
+                });
+
+                // ==========================================
+                // RENDERIZAÇÃO DO GRÁFICO (Chart.js)
+                // ==========================================
+                if (perfil === 'admin' || perfil === 'operador') {
+                    const ctx = document.getElementById('graficoEntregas').getContext('2d');
+
+                    new Chart(ctx, {
+                        type: 'bar', // Pode mudar para 'pie' (pizza) ou 'line' (linha)
+                        data: {
+                            labels: ['Pendentes', 'Em Rota', 'Entregues', 'Problemas'],
+                            datasets: [{
+                                label: 'Quantidade de Entregas',
+                                data: [12, 19, 35, 2], // Dados simulados para o visual
+                                backgroundColor: [
+                                    'rgba(255, 193, 7, 0.6)',  // Amarelo
+                                    'rgba(13, 110, 253, 0.6)', // Azul
+                                    'rgba(25, 135, 84, 0.6)',  // Verde
+                                    'rgba(220, 53, 69, 0.6)'   // Vermelho
+                                ],
+                                borderColor: [
+                                    'rgb(255, 193, 7)',
+                                    'rgb(13, 110, 253)',
+                                    'rgb(25, 135, 84)',
+                                    'rgb(220, 53, 69)'
+                                ],
+                                borderWidth: 1,
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false } // Oculta a legenda superior para ficar mais limpo
+                            },
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                }
+            })();
+    </script>
 </body>
 </html>

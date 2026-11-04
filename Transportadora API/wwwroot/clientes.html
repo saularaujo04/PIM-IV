@@ -10,7 +10,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Logística PIM IV</a>
+            <a class="navbar-brand fw-bold" href="index.html">Logística PIM IV</a>
             <div class="navbar-nav">
                 <a class="nav-link active" href="clientes.html">Clientes</a>
                 <a class="nav-link" href="motoristas.html">Motoristas</a>
@@ -26,22 +26,27 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white font-weight-bold">Novo Cliente</div>
                     <div class="card-body">
-                        <form id="formCliente">
+                        <!-- 1. Adicionado needs-validation e novalidate -->
+                        <form id="formCliente" class="needs-validation" novalidate>
                             <div class="mb-3">
                                 <label class="form-label">Nome / Razão Social</label>
                                 <input type="text" id="nome" class="form-control" required>
+                                <div class="invalid-feedback">O nome é obrigatório.</div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">CPF / CNPJ</label>
-                                <input type="text" id="documento" class="form-control" required>
+                                <input type="text" id="documento" class="form-control" required minlength="14">
+                                <div class="invalid-feedback">Informe um CPF ou CNPJ válido.</div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">E-mail</label>
                                 <input type="email" id="email" class="form-control" required>
+                                <div class="invalid-feedback">Informe um e-mail válido.</div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Telefone</label>
-                                <input type="text" id="telefone" class="form-control" required>
+                                <input type="text" id="telefone" class="form-control" required minlength="14">
+                                <div class="invalid-feedback">O telefone é obrigatório.</div>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
                         </form>
@@ -50,6 +55,7 @@
             </div>
 
             <div class="col-md-8">
+                <!-- Tabela de clientes continua igual -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-dark text-white">Clientes Cadastrados</div>
                     <div class="card-body">
@@ -63,9 +69,7 @@
                                     <th>Telefone</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelaClientes">
-                                <!-- Dados carregados via Fetch API -->
-                            </tbody>
+                            <tbody id="tabelaClientes"></tbody>
                         </table>
                     </div>
                 </div>
@@ -73,64 +77,107 @@
         </div>
     </div>
 
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+
     <script>
-            // @ts-nocheck
-            (function () {
-                const API_URL = 'https://localhost:7026/api/Clientes';
+                // @ts-nocheck
 
-                async function carregarClientes() {
-                    try {
-                        const res = await fetch(API_URL);
-                        const clientes = await res.json();
-                        const tbody = document.getElementById('tabelaClientes');
-                        if (!tbody) return;
-
-                        tbody.innerHTML = '';
-                        clientes.forEach((c) => {
-                            tbody.innerHTML += `
-                                <tr>
-                                    <td>${c.id}</td>
-                                    <td>${c.nome}</td>
-                                    <td>${c.documento}</td>
-                                    <td>${c.email}</td>
-                                    <td>${c.telefone}</td>
-                                </tr>`;
-                        });
-                    } catch (err) {
-                        console.error('Erro ao carregar clientes:', err);
-                    }
+                function mostrarToast(mensagem, corFundo) {
+                    const toastEl = document.getElementById('toastNotificacao');
+                    const toastMsg = document.getElementById('toastMensagem');
+                    toastEl.className = `toast align-items-center text-white border-0 ${corFundo}`;
+                    toastMsg.textContent = mensagem;
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
                 }
 
-                const form = document.getElementById('formCliente');
-                if (form) {
-                    form.addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const cliente = {
-                            nome: document.getElementById('nome').value,
-                            documento: document.getElementById('documento').value,
-                            email: document.getElementById('email').value,
-                            telefone: document.getElementById('telefone').value
-                        };
+                (function () {
+                    const API_URL = 'https://localhost:7026/api/Clientes';
 
-                        const res = await fetch(API_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(cliente)
-                        });
+                    async function carregarClientes() {
+                        try {
+                            const res = await fetch(API_URL);
+                            const clientes = await res.json();
+                            const tbody = document.getElementById('tabelaClientes');
+                            if (!tbody) return;
 
-                        if (res.ok) {
-                            alert('Cliente cadastrado com sucesso!');
-                            form.reset();
-                            carregarClientes();
-                        } else {
-                            alert('Erro ao cadastrar cliente.');
+                            tbody.innerHTML = '';
+                            clientes.forEach((c) => {
+                                tbody.innerHTML += `
+                                    <tr>
+                                        <td>${c.id}</td>
+                                        <td>${c.nome}</td>
+                                        <td>${c.documento}</td>
+                                        <td>${c.email}</td>
+                                        <td>${c.telefone}</td>
+                                    </tr>`;
+                            });
+                        } catch (err) {
+                            console.error('Erro ao carregar clientes:', err);
+                            mostrarToast('Erro ao carregar a lista de clientes.', 'bg-danger');
                         }
-                    });
-                }
+                    }
 
-                carregarClientes();
-            })();
+                    const form = document.getElementById('formCliente');
+                    if (form) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            // 2. Validação do formulário antes de enviar para a API
+                            if (!form.checkValidity()) {
+                                e.stopPropagation();
+                                form.classList.add('was-validated');
+                                return; // Pára a execução aqui se houver erros
+                            }
+
+                            const cliente = {
+                                nome: document.getElementById('nome').value,
+                                documento: document.getElementById('documento').value,
+                                email: document.getElementById('email').value,
+                                telefone: document.getElementById('telefone').value
+                            };
+
+                            try {
+                                const res = await fetch(API_URL, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(cliente)
+                                });
+
+                                if (res.ok) {
+                                    mostrarToast('Cliente cadastrado com sucesso!', 'bg-success');
+                                    form.reset();
+                                    form.classList.remove('was-validated'); // Limpa o estado visual após o sucesso
+                                    carregarClientes();
+                                } else {
+                                    mostrarToast('Erro ao cadastrar cliente. Verifique os dados.', 'bg-danger');
+                                }
+                            } catch (err) {
+                                console.error('Erro de requisição:', err);
+                                mostrarToast('Falha na comunicação com o servidor.', 'bg-danger');
+                            }
+                        });
+                    }
+
+                    // Máscaras (IMask)
+                    const docInput = document.getElementById('documento');
+                    if (docInput) IMask(docInput, { mask: [{ mask: '000.000.000-00' }, { mask: '00.000.000/0000-00' }] });
+
+                    const telInput = document.getElementById('telefone');
+                    if (telInput) IMask(telInput, { mask: '(00) 00000-0000' });
+
+                    carregarClientes();
+                })();
     </script>
-
 </body>
 </html>
