@@ -26,7 +26,6 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white font-weight-bold">Novo Cliente</div>
                     <div class="card-body">
-                        <!-- 1. Adicionado needs-validation e novalidate -->
                         <form id="formCliente" class="needs-validation" novalidate>
                             <div class="mb-3">
                                 <label class="form-label">Nome / Razão Social</label>
@@ -55,7 +54,6 @@
             </div>
 
             <div class="col-md-8">
-                <!-- Tabela de clientes continua igual -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-dark text-white">Clientes Cadastrados</div>
                     <div class="card-body">
@@ -92,12 +90,15 @@
     <script>
                 // @ts-nocheck
 
+                // CHECKPOINT 1.1: Toast configurado para exatos 3000 milissegundos (3 segundos)
                 function mostrarToast(mensagem, corFundo) {
                     const toastEl = document.getElementById('toastNotificacao');
                     const toastMsg = document.getElementById('toastMensagem');
+
                     toastEl.className = `toast align-items-center text-white border-0 ${corFundo}`;
                     toastMsg.textContent = mensagem;
-                    const toast = new bootstrap.Toast(toastEl);
+
+                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
                     toast.show();
                 }
 
@@ -113,13 +114,20 @@
 
                             tbody.innerHTML = '';
                             clientes.forEach((c) => {
+                                // CHECKPOINT 1.2: Mapeamento de propriedades à prova de falhas contra o "undefined"
+                                const id = c.id || c.Id || '-';
+                                const nome = c.nome || c.Nome || '-';
+                                const documento = c.documento || c.Documento || c.cpf || c.Cpf || c.cnpj || c.Cnpj || '-';
+                                const email = c.email || c.Email || '-';
+                                const telefone = c.telefone || c.Telefone || '-';
+
                                 tbody.innerHTML += `
                                     <tr>
-                                        <td>${c.id}</td>
-                                        <td>${c.nome}</td>
-                                        <td>${c.documento}</td>
-                                        <td>${c.email}</td>
-                                        <td>${c.telefone}</td>
+                                        <td class="fw-bold text-secondary">${id}</td>
+                                        <td>${nome}</td>
+                                        <td>${documento}</td>
+                                        <td>${email}</td>
+                                        <td>${telefone}</td>
                                     </tr>`;
                             });
                         } catch (err) {
@@ -133,11 +141,10 @@
                         form.addEventListener('submit', async (e) => {
                             e.preventDefault();
 
-                            // 2. Validação do formulário antes de enviar para a API
                             if (!form.checkValidity()) {
                                 e.stopPropagation();
                                 form.classList.add('was-validated');
-                                return; // Pára a execução aqui se houver erros
+                                return;
                             }
 
                             const cliente = {
@@ -157,7 +164,7 @@
                                 if (res.ok) {
                                     mostrarToast('Cliente cadastrado com sucesso!', 'bg-success');
                                     form.reset();
-                                    form.classList.remove('was-validated'); // Limpa o estado visual após o sucesso
+                                    form.classList.remove('was-validated');
                                     carregarClientes();
                                 } else {
                                     mostrarToast('Erro ao cadastrar cliente. Verifique os dados.', 'bg-danger');
