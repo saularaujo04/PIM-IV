@@ -5,192 +5,259 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Entregas - Transportadora</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/global.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">Logística PIM IV</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="clientes.html">Clientes</a>
-                <a class="nav-link" href="motoristas.html">Motoristas</a>
-                <a class="nav-link" href="veiculos.html">Veículos</a>
-                <a class="nav-link active" href="entregas.html">Entregas</a>
-            </div>
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link active">📦 Entregas</a></li>
+            </ul>
         </div>
-    </nav>
 
-    <div class="container-fluid px-4">
-        <div class="row mb-4">
-            <!-- Formulário de Nova Entrega -->
-            <div class="col-md-3">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white fw-bold">Nova Entrega</div>
-                    <div class="card-body">
-                        <form id="formEntrega">
-                            <div class="mb-2">
-                                <label class="form-label small">Cliente</label>
-                                <select id="clienteId" class="form-select form-select-sm" required>
-                                    <option value="">Selecione...</option>
-                                </select>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label small">Motorista</label>
-                                <select id="motoristaId" class="form-select form-select-sm" required>
-                                    <option value="">Selecione...</option>
-                                </select>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label small">Veículo</label>
-                                <select id="veiculoId" class="form-select form-select-sm" required>
-                                    <option value="">Selecione...</option>
-                                </select>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label small">Origem</label>
-                                <input type="text" id="enderecoOrigem" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small">Destino</label>
-                                <input type="text" id="enderecoDestino" class="form-control form-control-sm" required>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-sm w-100">Registrar Entrega</button>
-                        </form>
-                    </div>
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Painel de Entregas</h2>
+                    <p class="text-muted m-0 mt-1">Gestão de fretes, atribuição de rotas e status operacional.</p>
                 </div>
+                <!-- Botão Novo Registo restrito apenas a Admin/Operador no JS -->
+                <button id="btnNovaEntrega" class="btn btn-primary shadow-sm fw-bold px-4 d-none" data-bs-toggle="modal" data-bs-target="#modalNovaEntrega">
+                    + Nova Entrega
+                </button>
             </div>
 
-            <!-- Tabela de Entregas com Ações -->
-            <div class="col-md-9">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white fw-bold">Painel de Fretes e Status</div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Rota (Origem ➔ Destino)</th>
-                                        <th>Cliente ID</th>
-                                        <th>Status</th>
-                                        <th class="text-center">Ações Rápidas</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabelaEntregas"></tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">Cód</th>
+                                <th class="py-3 text-muted">Cliente</th>
+                                <th class="py-3 text-muted">Motorista</th>
+                                <th class="py-3 text-muted">Veículo</th>
+                                <th class="py-3 text-muted">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaEntregas" class="border-top-0"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal fade" id="modalNovaEntrega" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Criar Nova Entrega</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEntrega" class="needs-validation" novalidate>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">CLIENTE CONTRATANTE</label>
+                                <select id="clienteId" class="form-select form-select-lg fs-6 bg-light" required>
+                                    <option value="">A carregar clientes...</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione um cliente.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">MOTORISTA RESPONSÁVEL</label>
+                                <select id="motoristaId" class="form-select form-select-lg fs-6 bg-light" required>
+                                    <option value="">A carregar motoristas...</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione um motorista.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">VEÍCULO ALOCADO</label>
+                                <select id="veiculoId" class="form-select form-select-lg fs-6 bg-light" required>
+                                    <option value="">A carregar veículos...</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione um veículo.</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Atribuir Rota</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-            // @ts-nocheck
-            (function () {
-                const BASE_API = 'https://localhost:7026/api';
+                // @ts-nocheck
 
-                async function carregarDropdowns() {
-                    try {
-                        const [resCli, resMot, resVei] = await Promise.all([
-                            fetch(`${BASE_API}/Clientes`),
-                            fetch(`${BASE_API}/Motoristas`),
-                            fetch(`${BASE_API}/Veiculos`)
-                        ]);
-
-                        const clientes = await resCli.json();
-                        const selectCli = document.getElementById('clienteId');
-                        if (selectCli) clientes.forEach(c => selectCli.innerHTML += `<option value="${c.id}">${c.nome}</option>`);
-
-                        const motoristas = await resMot.json();
-                        const selectMot = document.getElementById('motoristaId');
-                        if (selectMot) motoristas.forEach(m => selectMot.innerHTML += `<option value="${m.id}">${m.nome}</option>`);
-
-                        const veiculos = await resVei.json();
-                        const selectVei = document.getElementById('veiculoId');
-                        if (selectVei) veiculos.forEach(v => selectVei.innerHTML += `<option value="${v.id}">${v.placa}</option>`);
-                    } catch (err) {
-                        console.error('Erro ao carregar dropdowns:', err);
-                    }
+                function mostrarToast(mensagem, corFundo) {
+                    const toastEl = document.getElementById('toastNotificacao');
+                    const toastMsg = document.getElementById('toastMensagem');
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
+                    toastMsg.textContent = mensagem;
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
                 }
 
-                async function carregarEntregas() {
-                    try {
-                        const res = await fetch(`${BASE_API}/Entregas`);
-                        const entregas = await res.json();
-                        const tbody = document.getElementById('tabelaEntregas');
-                        if (!tbody) return;
-
-                        tbody.innerHTML = '';
-                        entregas.forEach((e) => {
-                            // Define a cor do badge dependendo do status retornado (ajuste se sua API retornar nomes diferentes)
-                            let statusBadge = `<span class="badge bg-secondary">Pendente</span>`;
-                            if (e.status === 1 || e.status === 'EmRota') statusBadge = `<span class="badge bg-primary">Em Rota</span>`;
-                            if (e.status === 2 || e.status === 'Concluida') statusBadge = `<span class="badge bg-success">Concluída</span>`;
-
-                            tbody.innerHTML += `
-                                <tr>
-                                    <td><strong>#${e.id}</strong></td>
-                                    <td><small>${e.enderecoOrigem} <br>➔ ${e.enderecoDestino}</small></td>
-                                    <td>${e.clienteId}</td>
-                                    <td>${statusBadge}</td>
-                                    <td class="text-center">
-                                        <button onclick="alterarStatus(${e.id}, 'iniciar-rota')" class="btn btn-sm btn-outline-primary" title="Iniciar Rota">▶ Iniciar</button>
-                                        <button onclick="alterarStatus(${e.id}, 'concluir')" class="btn btn-sm btn-outline-success" title="Concluir Entrega">✔ Concluir</button>
-                                    </td>
-                                </tr>`;
-                        });
-                    } catch (err) {
-                        console.error('Erro ao carregar entregas:', err);
+                (function () {
+                    // Verifica permissões
+                    const perfil = localStorage.getItem('perfilAcesso');
+                    if (perfil === 'admin' || perfil === 'operador') {
+                        document.getElementById('btnNovaEntrega').classList.remove('d-none');
                     }
-                }
 
-                // Função global para ser chamada pelos botões HTML
-                window.alterarStatus = async function(id, acao) {
-                    if (!confirm(`Deseja realmente ${acao === 'concluir' ? 'concluir' : 'iniciar'} esta entrega?`)) return;
+                    const API_BASE = 'https://localhost:7026/api';
 
-                    try {
-                        const res = await fetch(`${BASE_API}/Entregas/${id}/${acao}`, { method: 'POST' });
-                        if (res.ok) {
-                            carregarEntregas(); // Recarrega a tabela para atualizar o badge de status
-                        } else {
-                            alert(`Não foi possível ${acao} a entrega. Verifique as regras no backend.`);
+                    // 1. CARREGAR DEPENDÊNCIAS PARA PREENCHER OS SELECTS (Relacionamento SQL)
+                    async function carregarDependencias() {
+                        try {
+                            // Executa as 3 requisições ao mesmo tempo para não travar a tela
+                            const [resCli, resMot, resVei] = await Promise.all([
+                                fetch(`${API_BASE}/Clientes`),
+                                fetch(`${API_BASE}/Motoristas`),
+                                fetch(`${API_BASE}/Veiculos`)
+                            ]);
+
+                            const clientes = await resCli.json();
+                            const motoristas = await resMot.json();
+                            const veiculos = await resVei.json();
+
+                            // Preenche Cliente
+                            const selCli = document.getElementById('clienteId');
+                            selCli.innerHTML = '<option value="">Selecione o Cliente...</option>';
+                            clientes.forEach(c => { selCli.innerHTML += `<option value="${c.id || c.Id}">${c.nome || c.Nome}</option>`; });
+
+                            // Preenche Motorista
+                            const selMot = document.getElementById('motoristaId');
+                            selMot.innerHTML = '<option value="">Selecione o Motorista...</option>';
+                            motoristas.forEach(m => { selMot.innerHTML += `<option value="${m.id || m.Id}">${m.nome || m.Nome}</option>`; });
+
+                            // Preenche Veiculo
+                            const selVei = document.getElementById('veiculoId');
+                            selVei.innerHTML = '<option value="">Selecione o Veículo...</option>';
+                            veiculos.forEach(v => { selVei.innerHTML += `<option value="${v.id || v.Id}">${v.modelo || v.Modelo} (${v.placa || v.Placa})</option>`; });
+
+                        } catch (err) {
+                            console.error('Erro ao carregar selects', err);
+                            mostrarToast('Erro ao carregar dados auxiliares.', 'bg-danger');
                         }
-                    } catch (err) {
-                        console.error('Erro ao alterar status:', err);
                     }
-                };
 
-                const form = document.getElementById('formEntrega');
-                if (form) {
-                    form.addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const entrega = {
-                            clienteId: parseInt(document.getElementById('clienteId').value),
-                            motoristaId: parseInt(document.getElementById('motoristaId').value),
-                            veiculoId: parseInt(document.getElementById('veiculoId').value),
-                            enderecoOrigem: document.getElementById('enderecoOrigem').value,
-                            enderecoDestino: document.getElementById('enderecoDestino').value
-                        };
+                    // 2. CARREGAR AS ENTREGAS NA TABELA
+                    async function carregarEntregas() {
+                        try {
+                            const res = await fetch(`${API_BASE}/Entregas`);
+                            if(!res.ok) {
+                                // Se a API ainda não existir no C#, avisamos suavemente
+                                document.getElementById('tabelaEntregas').innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">API de Entregas ainda não implementada no C#.</td></tr>';
+                                return;
+                            }
 
-                        const res = await fetch(`${BASE_API}/Entregas`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(entrega)
-                        });
+                            const entregas = await res.json();
+                            const tbody = document.getElementById('tabelaEntregas');
+                            tbody.innerHTML = '';
 
-                        if (res.ok) {
-                            form.reset();
-                            carregarEntregas();
-                        } else {
-                            alert('Erro ao registrar entrega.');
+                            if(entregas.length === 0) {
+                                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Nenhuma entrega registada.</td></tr>';
+                            }
+
+                            entregas.forEach((e) => {
+                                // Simulando o objeto que o EF Core vai trazer via JOIN (Include)
+                                const id = e.id || e.Id || '-';
+                                const clienteNome = e.cliente?.nome || e.Cliente?.Nome || `ID: ${e.clienteId || e.ClienteId}`;
+                                const motoristaNome = e.motorista?.nome || e.Motorista?.Nome || `ID: ${e.motoristaId || e.MotoristaId}`;
+                                const veiculoPlaca = e.veiculo?.placa || e.Veiculo?.Placa || `ID: ${e.veiculoId || e.VeiculoId}`;
+
+                                let statusBadge = '<span class="badge bg-warning text-dark">Pendente</span>';
+                                if (e.status === 'Em Rota') statusBadge = '<span class="badge bg-primary">Em Rota</span>';
+                                if (e.status === 'Concluído') statusBadge = '<span class="badge bg-success">Concluído</span>';
+
+                                tbody.innerHTML += `
+                                    <tr>
+                                        <td class="px-4 fw-bold text-secondary py-3">#${id}</td>
+                                        <td class="fw-medium text-dark py-3">${clienteNome}</td>
+                                        <td class="text-secondary py-3">${motoristaNome}</td>
+                                        <td class="text-secondary py-3">${veiculoPlaca}</td>
+                                        <td class="py-3">${statusBadge}</td>
+                                    </tr>`;
+                            });
+                        } catch (err) {
+                            console.log('API de Entregas provavelmente ainda não criada no Backend.');
                         }
-                    });
-                }
+                    }
 
-                carregarDropdowns();
-                carregarEntregas();
-            })();
+                    const form = document.getElementById('formEntrega');
+                    if (form) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            if (!form.checkValidity()) {
+                                e.stopPropagation();
+                                form.classList.add('was-validated');
+                                return;
+                            }
+
+                            // Prepara o objeto com as chaves estrangeiras
+                            const entrega = {
+                                clienteId: parseInt(document.getElementById('clienteId').value),
+                                motoristaId: parseInt(document.getElementById('motoristaId').value),
+                                veiculoId: parseInt(document.getElementById('veiculoId').value),
+                                status: 'Pendente' // Status inicial padrão
+                            };
+
+                            try {
+                                const res = await fetch(`${API_BASE}/Entregas`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(entrega)
+                                });
+
+                                if (res.ok) {
+                                    mostrarToast('Entrega criada com sucesso!', 'bg-success');
+                                    form.reset();
+                                    form.classList.remove('was-validated');
+                                    carregarEntregas();
+
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovaEntrega'));
+                                    if(modalInstance) modalInstance.hide();
+                                } else {
+                                    mostrarToast('Erro ao criar entrega (Verifique a API no C#).', 'bg-danger');
+                                }
+                            } catch (err) {
+                                mostrarToast('Falha na comunicação. A API de Entregas já está criada no C#?', 'bg-danger');
+                            }
+                        });
+                    }
+
+                    carregarDependencias();
+                    carregarEntregas();
+                })();
     </script>
 </body>
 </html>

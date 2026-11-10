@@ -5,78 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Clientes - Transportadora</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Importação do nosso CSS Clean SaaS -->
+    <link href="css/global.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">Logística PIM IV</a>
-            <div class="navbar-nav">
-                <a class="nav-link active" href="clientes.html">Clientes</a>
-                <a class="nav-link" href="motoristas.html">Motoristas</a>
-                <a class="nav-link" href="veiculos.html">Veículos</a>
-                <a class="nav-link" href="entregas.html">Entregas</a>
-            </div>
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link active">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link">📦 Entregas</a></li>
+            </ul>
         </div>
-    </nav>
 
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white font-weight-bold">Novo Cliente</div>
-                    <div class="card-body">
-                        <form id="formCliente" class="needs-validation" novalidate>
-                            <div class="mb-3">
-                                <label class="form-label">Nome / Razão Social</label>
-                                <input type="text" id="nome" class="form-control" required>
-                                <div class="invalid-feedback">O nome é obrigatório.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">CPF / CNPJ</label>
-                                <input type="text" id="documento" class="form-control" required minlength="14">
-                                <div class="invalid-feedback">Informe um CPF ou CNPJ válido.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">E-mail</label>
-                                <input type="email" id="email" class="form-control" required>
-                                <div class="invalid-feedback">Informe um e-mail válido.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Telefone</label>
-                                <input type="text" id="telefone" class="form-control" required minlength="14">
-                                <div class="invalid-feedback">O telefone é obrigatório.</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
-                        </form>
-                    </div>
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <!-- Cabeçalho da Página com Botão de Novo Registo -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Clientes Cadastrados</h2>
+                    <p class="text-muted m-0 mt-1">Lista completa de parceiros e contratantes da transportadora.</p>
                 </div>
+                <!-- Aciona o Modal -->
+                <button class="btn btn-primary shadow-sm fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalNovoCliente">
+                    + Novo Cliente
+                </button>
             </div>
 
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white">Clientes Cadastrados</div>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>Documento</th>
-                                    <th>E-mail</th>
-                                    <th>Telefone</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabelaClientes"></tbody>
-                        </table>
-                    </div>
+            <!-- Tabela Ocupando 100% da área útil -->
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">ID</th>
+                                <th class="py-3 text-muted">Nome / Razão Social</th>
+                                <th class="py-3 text-muted">Documento</th>
+                                <th class="py-3 text-muted">E-mail</th>
+                                <th class="py-3 text-muted">Telefone</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaClientes" class="border-top-0"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="toastNotificacao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- MODAL DE CADASTRO (Janela Flutuante) -->
+    <div class="modal fade" id="modalNovoCliente" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark" id="modalLabel">Cadastrar Novo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+
+                    <!-- Formulário Blindado com Validação -->
+                    <form id="formCliente" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">NOME / RAZÃO SOCIAL</label>
+                            <input type="text" id="nome" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O nome é obrigatório.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CPF / CNPJ</label>
+                            <input type="text" id="documento" class="form-control form-control-lg fs-6 bg-light" required minlength="14">
+                            <div class="invalid-feedback">Informe um CPF ou CNPJ válido.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">E-MAIL CORPORATIVO</label>
+                            <input type="email" id="email" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">Informe um e-mail válido.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">TELEFONE DE CONTATO</label>
+                            <input type="text" id="telefone" class="form-control form-control-lg fs-6 bg-light" required minlength="14">
+                            <div class="invalid-feedback">O telefone é obrigatório.</div>
+                        </div>
+                        <div class="mt-5 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Salvar Cliente</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST DE NOTIFICAÇÃO -->
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body fw-bold" id="toastMensagem"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
@@ -84,22 +111,19 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/imask"></script>
 
     <script>
                 // @ts-nocheck
 
-                // CHECKPOINT 1.1: Toast configurado para exatos 3000 milissegundos (3 segundos)
                 function mostrarToast(mensagem, corFundo) {
                     const toastEl = document.getElementById('toastNotificacao');
                     const toastMsg = document.getElementById('toastMensagem');
-
-                    toastEl.className = `toast align-items-center text-white border-0 ${corFundo}`;
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
                     toastMsg.textContent = mensagem;
-
-                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                    toast.show();
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
                 }
 
                 (function () {
@@ -114,24 +138,22 @@
 
                             tbody.innerHTML = '';
                             clientes.forEach((c) => {
-                                // CHECKPOINT 1.2: Mapeamento de propriedades à prova de falhas contra o "undefined"
                                 const id = c.id || c.Id || '-';
                                 const nome = c.nome || c.Nome || '-';
-                                const documento = c.documento || c.Documento || c.cpf || c.Cpf || c.cnpj || c.Cnpj || '-';
+                                const doc = c.documento || c.Documento || c.cpf || c.Cpf || c.cnpj || c.Cnpj || '-';
                                 const email = c.email || c.Email || '-';
                                 const telefone = c.telefone || c.Telefone || '-';
 
                                 tbody.innerHTML += `
                                     <tr>
-                                        <td class="fw-bold text-secondary">${id}</td>
-                                        <td>${nome}</td>
-                                        <td>${documento}</td>
-                                        <td>${email}</td>
-                                        <td>${telefone}</td>
+                                        <td class="px-4 fw-bold text-secondary py-3">${id}</td>
+                                        <td class="fw-medium text-dark py-3">${nome}</td>
+                                        <td class="text-secondary py-3">${doc}</td>
+                                        <td class="text-secondary py-3">${email}</td>
+                                        <td class="text-secondary py-3">${telefone}</td>
                                     </tr>`;
                             });
                         } catch (err) {
-                            console.error('Erro ao carregar clientes:', err);
                             mostrarToast('Erro ao carregar a lista de clientes.', 'bg-danger');
                         }
                     }
@@ -166,17 +188,21 @@
                                     form.reset();
                                     form.classList.remove('was-validated');
                                     carregarClientes();
+
+                                    // FECHA O MODAL AUTOMATICAMENTE APÓS O SUCESSO!
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovoCliente'));
+                                    if(modalInstance) modalInstance.hide();
+
                                 } else {
-                                    mostrarToast('Erro ao cadastrar cliente. Verifique os dados.', 'bg-danger');
+                                    mostrarToast('Erro ao cadastrar cliente.', 'bg-danger');
                                 }
                             } catch (err) {
-                                console.error('Erro de requisição:', err);
-                                mostrarToast('Falha na comunicação com o servidor.', 'bg-danger');
+                                mostrarToast('Falha na comunicação com a API.', 'bg-danger');
                             }
                         });
                     }
 
-                    // Máscaras (IMask)
+                    // Máscaras IMask
                     const docInput = document.getElementById('documento');
                     if (docInput) IMask(docInput, { mask: [{ mask: '000.000.000-00' }, { mask: '00.000.000/0000-00' }] });
 

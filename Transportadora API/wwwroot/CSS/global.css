@@ -1,0 +1,61 @@
+﻿/* wwwroot/css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f9; /* Fundo cinza bem claro, padrão SaaS */
+    color: #333;
+}
+
+/* Sombras suaves para os cartões (Soft Shadows) */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    background-color: #fff !important;
+    border-bottom: 1px solid #eaeaea;
+    color: #111 !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1rem 1.5rem;
+}
+
+/* Customização de botões para parecerem mais modernos */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    transition: all 0.2s;
+}
+
+/* Navegação Lateral (Sidebar) */
+.sidebar {
+    height: 100vh;
+    background-color: #1e293b; /* Azul escuro/Chumbo corporativo */
+    color: #fff;
+}
+
+    .sidebar .nav-link {
+        color: #cbd5e1;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: #334155;
+            color: #fff;
+        }
+
+/* Tabelas mais limpas */
+.table {
+    vertical-align: middle;
+}
+
+    .table th {
+        font-weight: 600;
+        color: #64748b;
+        border-bottom: 2px solid #f1f5f9;
+    }

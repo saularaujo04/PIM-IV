@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Transportadora.Application\Transportadora.Application.csproj" />
+    <ProjectReference Include="..\Transportadora.Domain\Transportadora.Domain.csproj" />
     <ProjectReference Include="..\Transportadora.Infrastructure\Transportadora.Infrastructure.csproj" />
   </ItemGroup>
 

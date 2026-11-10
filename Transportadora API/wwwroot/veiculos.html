@@ -5,80 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Veículos - Transportadora</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/global.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">Logística PIM IV</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="clientes.html">Clientes</a>
-                <a class="nav-link" href="motoristas.html">Motoristas</a>
-                <a class="nav-link active" href="veiculos.html">Veículos</a>
-                <a class="nav-link" href="entregas.html">Entregas</a>
-            </div>
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link active">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link">📦 Entregas</a></li>
+            </ul>
         </div>
-    </nav>
 
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white font-weight-bold">Novo Veículo</div>
-                    <div class="card-body">
-                        <!-- Formulário com validação nativa -->
-                        <form id="formVeiculo" class="needs-validation" novalidate>
-                            <div class="mb-3">
-                                <label class="form-label">Placa</label>
-                                <input type="text" id="placa" class="form-control" required minlength="8">
-                                <div class="invalid-feedback">Informe uma placa válida (ex: ABC-1234 ou ABC1D23).</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Modelo</label>
-                                <input type="text" id="modelo" class="form-control" required>
-                                <div class="invalid-feedback">O modelo é obrigatório.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Capacidade (Kg)</label>
-                                <input type="text" id="capacidadeKg" class="form-control" required>
-                                <div class="invalid-feedback">A capacidade é obrigatória.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tipo</label>
-                                <input type="text" id="tipo" class="form-control" placeholder="Ex: Caminhão, Van" required>
-                                <div class="invalid-feedback">O tipo de veículo é obrigatório.</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cadastrar Veículo</button>
-                        </form>
-                    </div>
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Frota de Veículos</h2>
+                    <p class="text-muted m-0 mt-1">Gestão de viaturas, placas e capacidade de carga.</p>
                 </div>
+                <button class="btn btn-primary shadow-sm fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalNovoVeiculo">
+                    + Novo Veículo
+                </button>
             </div>
 
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white">Veículos Cadastrados</div>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Placa</th>
-                                    <th>Modelo</th>
-                                    <th>Capacidade (Kg)</th>
-                                    <th>Tipo</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabelaVeiculos"></tbody>
-                        </table>
-                    </div>
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">ID</th>
+                                <th class="py-3 text-muted">Placa</th>
+                                <th class="py-3 text-muted">Modelo</th>
+                                <th class="py-3 text-muted">Capacidade (Kg)</th>
+                                <th class="py-3 text-muted">Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaVeiculos" class="border-top-0"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CONTAINER DO TOAST -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="toastNotificacao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal fade" id="modalNovoVeiculo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Cadastrar Novo Veículo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formVeiculo" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">PLACA</label>
+                            <input type="text" id="placa" class="form-control form-control-lg fs-6 bg-light" required minlength="8">
+                            <div class="invalid-feedback">Informe a placa.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">MODELO</label>
+                            <input type="text" id="modelo" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O modelo é obrigatório.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CAPACIDADE (KG)</label>
+                            <input type="text" id="capacidadeKg" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">A capacidade é obrigatória.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">TIPO (Ex: Caminhão, Van)</label>
+                            <input type="text" id="tipo" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O tipo é obrigatório.</div>
+                        </div>
+                        <div class="mt-5 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Salvar Veículo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body fw-bold" id="toastMensagem"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
@@ -95,10 +113,9 @@
                 function mostrarToast(mensagem, corFundo) {
                     const toastEl = document.getElementById('toastNotificacao');
                     const toastMsg = document.getElementById('toastMensagem');
-                    toastEl.className = `toast align-items-center text-white border-0 ${corFundo}`;
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
                     toastMsg.textContent = mensagem;
-                    const toast = new bootstrap.Toast(toastEl);
-                    toast.show();
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
                 }
 
                 (function () {
@@ -113,17 +130,24 @@
 
                             tbody.innerHTML = '';
                             veiculos.forEach((v) => {
+                                // Mapeamento Anti-Undefined
+                                const id = v.id || v.Id || '-';
+                                const placa = v.placa || v.Placa || '-';
+                                const modelo = v.modelo || v.Modelo || '-';
+                                const capacidade = v.capacidadeKg || v.CapacidadeKg || '0';
+                                const tipo = v.tipo || v.Tipo || '-';
+
                                 tbody.innerHTML += `
                                     <tr>
-                                        <td>${v.id}</td>
-                                        <td>${v.placa}</td>
-                                        <td>${v.modelo}</td>
-                                        <td>${v.capacidadeKg} kg</td>
-                                        <td>${v.tipo || '-'}</td>
+                                        <td class="px-4 fw-bold text-secondary py-3">${id}</td>
+                                        <td class="fw-medium text-dark py-3">${placa}</td>
+                                        <td class="text-secondary py-3">${modelo}</td>
+                                        <td class="text-secondary py-3">${capacidade} kg</td>
+                                        <td class="text-secondary py-3">${tipo}</td>
                                     </tr>`;
                             });
                         } catch (err) {
-                            mostrarToast('Erro ao carregar a lista de veículos.', 'bg-danger');
+                            mostrarToast('Erro ao carregar a lista.', 'bg-danger');
                         }
                     }
 
@@ -132,7 +156,6 @@
                         form.addEventListener('submit', async (e) => {
                             e.preventDefault();
 
-                            // Validação do Bootstrap
                             if (!form.checkValidity()) {
                                 e.stopPropagation();
                                 form.classList.add('was-validated');
@@ -161,29 +184,29 @@
                                     form.reset();
                                     form.classList.remove('was-validated');
                                     carregarVeiculos();
+
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovoVeiculo'));
+                                    if(modalInstance) modalInstance.hide();
                                 } else {
-                                    mostrarToast('Erro ao cadastrar veículo.', 'bg-danger');
+                                    mostrarToast('Erro ao cadastrar.', 'bg-danger');
                                 }
                             } catch (err) {
-                                mostrarToast('Falha na comunicação com o servidor.', 'bg-danger');
+                                mostrarToast('Falha na comunicação.', 'bg-danger');
                             }
                         });
                     }
 
-                    // MÁSCARAS IMASK
                     const placaInput = document.getElementById('placa');
                     if (placaInput) {
                         IMask(placaInput, {
                             mask: 'aaa-0000',
-                            prepare: function (str) {
-                                return str.toUpperCase();
-                            }
+                            prepare: function (str) { return str.toUpperCase(); }
                         });
                     }
 
-                    const capacidadeInput = document.getElementById('capacidadeKg');
-                    if (capacidadeInput) {
-                        IMask(capacidadeInput, {
+                    const capInput = document.getElementById('capacidadeKg');
+                    if (capInput) {
+                        IMask(capInput, {
                             mask: Number,
                             min: 0,
                             thousandsSeparator: '.',
