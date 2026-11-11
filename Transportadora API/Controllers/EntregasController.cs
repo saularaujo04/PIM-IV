@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Transportadora.Application.DTOs;
 using Transportadora.Application.Services;
-using Transportadora.Domain.Entidades; // <-- Esta é a linha que resolve o erro CS0246
+using Transportadora.Domain;
 
 namespace Transportadora.API.Controllers;
 

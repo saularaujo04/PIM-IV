@@ -1,4 +1,4 @@
-﻿namespace Transportadora.Domain.Entidades; // Ajustado para refletir a sua estrutura de pastas
+﻿namespace Transportadora.Domain;
 
 public class Entrega : EntidadeBase
 {
@@ -17,7 +17,6 @@ public class Entrega : EntidadeBase
 
     protected Entrega() { }
 
-    // Construtor atualizado para suportar a criação simplificada via Front-end
     public Entrega(
         int clienteId,
         int motoristaId,
@@ -30,10 +29,7 @@ public class Entrega : EntidadeBase
         VeiculoId = veiculoId;
         EnderecoOrigem = enderecoOrigem;
         EnderecoDestino = enderecoDestino;
-
-        // Gera um código de rastreio único automaticamente
         CodigoRastreio = $"TRK-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}";
-
         Status = StatusEntrega.Pendente;
     }
 

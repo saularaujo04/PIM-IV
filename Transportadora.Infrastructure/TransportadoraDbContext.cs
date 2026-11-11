@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Transportadora.Domain;
-using Transportadora.Domain.Entidades; // Ajustado para corresponder à sua namespace
+using Transportadora.Domain.Entidades;
 
 namespace Transportadora.Infrastructure;
 
@@ -17,7 +17,7 @@ public class TransportadoraDbContext : DbContext
     public DbSet<Cliente> Clientes { get; set; }
     public DbSet<Motorista> Motoristas { get; set; }
     public DbSet<Veiculo> Veiculos { get; set; }
-    public DbSet<Usuario> Usuarios { get; set; } 
+    public DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
