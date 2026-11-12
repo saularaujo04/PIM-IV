@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Transportadora.Application.DTOs;
 using Transportadora.Application.Services;
-using Transportadora.Domain;
 
 namespace Transportadora.API.Controllers;
 
@@ -21,6 +20,14 @@ public class EntregasController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ObterTodas()
+    {
+        var entregas = await _service.ObterTodasAsync();
+        return Ok(entregas);
+    }
+
+    [HttpGet("minhas")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ObterMinhas()
     {
         var entregas = await _service.ObterTodasAsync();
         return Ok(entregas);
@@ -80,6 +87,25 @@ public class EntregasController : ControllerBase
         {
             await _service.ConcluirEntregaAsync(id);
             return Ok(new { Mensagem = "Entrega concluída com sucesso." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Mensagem = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/nao-realizada")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> MarcarNaoRealizada(int id)
+    {
+        try
+        {
+            await _service.RegistrarOcorrenciaAsync(id, new CriarOcorrenciaDto
+            {
+                Descricao = "Entrega não realizada pelo motorista."
+            });
+            return Ok(new { Mensagem = "Entrega marcada como não realizada." });
         }
         catch (Exception ex)
         {

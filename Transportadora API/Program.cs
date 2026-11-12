@@ -105,14 +105,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("PermitirTudo");
 
-app.UseAuthentication(); // Deve ficar obrigatoriamente antes de UseAuthorization
-app.UseAuthorization();
-
+// Obriga a API a ler a pasta wwwroot e servir o HTML
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 
+app.MapControllers();
 app.Run();
