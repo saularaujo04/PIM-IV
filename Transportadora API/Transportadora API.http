@@ -1,0 +1,46 @@
+@host = http://localhost:5178
+
+### 1) Login (copie o "token" da resposta e cole em @token abaixo)
+POST {{host}}/api/Auth/login
+Content-Type: application/json
+
+{ "email": "admin@pim.com", "senha": "123" }
+
+###
+@token = COLE_O_TOKEN_AQUI
+
+### 2) Listar entregas (painel)
+GET {{host}}/api/Entregas
+Authorization: Bearer {{token}}
+
+### 3) Criar entrega (ajuste os ids conforme seus cadastros)
+POST {{host}}/api/Entregas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "motoristaId": 1,
+  "veiculoId": 1,
+  "enderecoOrigem": "Galpão TransPIM - São Paulo/SP",
+  "enderecoDestino": "Av. Paulista, 1500 - São Paulo/SP"
+}
+
+### 4) Entregas do motorista logado (faça login com mot@pim.com / 123 e use o token dele)
+GET {{host}}/api/Entregas/minhas
+Authorization: Bearer {{token}}
+
+### 5) Iniciar rota / concluir / ocorrência (troque o 1 pelo id da entrega)
+POST {{host}}/api/Entregas/1/iniciar-rota
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/Entregas/1/ocorrencia
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "descricao": "Destinatário ausente: ninguém para receber." }
+
+###
+POST {{host}}/api/Entregas/1/concluir
+Authorization: Bearer {{token}}

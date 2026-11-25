@@ -1,0 +1,47 @@
+<<<<<<< HEAD
+name: CI - Build, Testes e Docker (.NET 8)
+=======
+name: CI/CD - Build e Validacao Docker (.NET 8)
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+<<<<<<< HEAD
+  build-test-docker:
+=======
+  build-and-docker:
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo do repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restaurar dependencias
+<<<<<<< HEAD
+        run: dotnet restore "Transportadora API.sln"
+
+      - name: Compilar solucao (Release)
+        run: dotnet build "Transportadora API.sln" --configuration Release --no-restore
+
+      - name: Executar testes automatizados
+        run: dotnet test "Transportadora API.sln" --configuration Release --no-build --verbosity normal
+=======
+        run: dotnet restore
+
+      - name: Compilar solucao (Release)
+        run: dotnet build --configuration Release --no-restore
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+      - name: Validar construcao da imagem Docker
+        run: docker build -t transportadora-api:latest .

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Motoristas - Transportadora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<<<<<<< HEAD
+    <link href="estilos/app.css" rel="stylesheet">
+</head>
+<body data-pagina="motoristas">
+
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside id="sidebarHost" class="sidebar"></aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-main">
+
+            <div class="pagina-cabecalho">
+=======
+    <link href="css/global.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link active">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link">📦 Entregas</a></li>
+            </ul>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Motoristas Cadastrados</h2>
+                    <p class="text-muted m-0 mt-1">Gestão da equipa de condutores e documentação (CNH).</p>
+                </div>
+                <button class="btn btn-primary shadow-sm fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalNovoMotorista">
+                    + Novo Motorista
+                </button>
+            </div>
+
+<<<<<<< HEAD
+            <div class="barra-ferramentas">
+                <input type="search" id="busca" class="form-control campo-busca" placeholder="Buscar por nome, CPF ou CNH..." aria-label="Buscar">
+            </div>
+
+            <div class="card p-0 overflow-hidden">
+=======
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">ID</th>
+                                <th class="py-3 text-muted">Nome Completo</th>
+                                <th class="py-3 text-muted">CPF</th>
+                                <th class="py-3 text-muted">CNH</th>
+                                <th class="py-3 text-muted">Cat.</th>
+                                <th class="py-3 text-muted">Telefone</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaMotoristas" class="border-top-0"></tbody>
+                    </table>
+                </div>
+            </div>
+<<<<<<< HEAD
+        </main>
+=======
+        </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+    </div>
+
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal fade" id="modalNovoMotorista" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Cadastrar Novo Motorista</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formMotorista" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">NOME COMPLETO</label>
+                            <input type="text" id="nome" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O nome é obrigatório.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CPF</label>
+                            <input type="text" id="cpf" class="form-control form-control-lg fs-6 bg-light" required minlength="14">
+                            <div class="invalid-feedback">Informe um CPF válido.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CNH (11 DÍGITOS)</label>
+                            <input type="text" id="cnh" class="form-control form-control-lg fs-6 bg-light" required minlength="11">
+                            <div class="invalid-feedback">A CNH é obrigatória.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CATEGORIA DA CNH</label>
+                            <select id="categoriaCnh" class="form-select form-select-lg fs-6 bg-light" required>
+                                <option value="">Selecione...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                            </select>
+                            <div class="invalid-feedback">Selecione a categoria.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">TELEFONE</label>
+                            <input type="text" id="telefone" class="form-control form-control-lg fs-6 bg-light" required minlength="14">
+                            <div class="invalid-feedback">O telefone é obrigatório.</div>
+                        </div>
+                        <div class="mt-5 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Salvar Motorista</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+<<<<<<< HEAD
+=======
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script src="js/app.js"></script>
+<<<<<<< HEAD
+    <script src="js/layout.js"></script>
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <script>
+                // @ts-nocheck
+
+<<<<<<< HEAD
+                
+=======
+                function mostrarToast(mensagem, corFundo) {
+                    const toastEl = document.getElementById('toastNotificacao');
+                    const toastMsg = document.getElementById('toastMensagem');
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
+                    toastMsg.textContent = mensagem;
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+                }
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+                (function () {
+                    if (!exigirLogin()) return;
+                    const API_URL = '/Motoristas';
+
+                    async function carregarMotoristas() {
+<<<<<<< HEAD
+                        UI.carregando('tabelaMotoristas', 6);
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                        try {
+                            const res = await apiFetch(API_URL);
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+                            const motoristas = await res.json();
+                            const tbody = document.getElementById('tabelaMotoristas');
+                            if (!tbody) return;
+
+                            tbody.innerHTML = '';
+<<<<<<< HEAD
+                            if (motoristas.length === 0) { UI.vazio('tabelaMotoristas', 6, 'Nenhum motorista cadastrado ainda.'); return; }
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            motoristas.forEach((m) => {
+                                tbody.insertAdjacentHTML('beforeend', `
+                                    <tr>
+                                        <td class="px-4 fw-bold text-secondary py-3">${esc(m.id)}</td>
+                                        <td class="fw-medium text-dark py-3">${esc(m.nome)}</td>
+                                        <td class="text-secondary py-3">${esc(m.cpf)}</td>
+                                        <td class="text-secondary py-3">${esc(m.cnh)}</td>
+                                        <td class="text-secondary py-3">${esc(m.categoriaCnh)}</td>
+                                        <td class="text-secondary py-3">${esc(m.telefone)}</td>
+                                    </tr>`);
+                            });
+                        } catch (err) {
+<<<<<<< HEAD
+                            UI.erro('tabelaMotoristas', 6, 'Não foi possível carregar os motoristas.');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            mostrarToast('Erro ao carregar a lista.', 'bg-danger');
+                        }
+                    }
+
+                    const form = document.getElementById('formMotorista');
+                    if (form) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+<<<<<<< HEAD
+                            validarCampo('cpf', validarCpf(document.getElementById('cpf').value), 'CPF inválido.');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            if (!form.checkValidity()) {
+                                e.stopPropagation();
+                                form.classList.add('was-validated');
+                                return;
+                            }
+
+                            const motorista = {
+                                nome: document.getElementById('nome').value,
+                                cpf: document.getElementById('cpf').value,
+                                cnh: document.getElementById('cnh').value,
+                                categoriaCnh: document.getElementById('categoriaCnh').value,
+                                telefone: document.getElementById('telefone').value
+                            };
+
+                            try {
+                                const res = await apiFetch(API_URL, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(motorista)
+                                });
+
+                                if (res.ok) {
+                                    mostrarToast('Motorista cadastrado com sucesso!', 'bg-success');
+                                    form.reset();
+                                    form.classList.remove('was-validated');
+                                    carregarMotoristas();
+
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovoMotorista'));
+                                    if(modalInstance) modalInstance.hide();
+                                } else {
+                                    mostrarToast(await mensagemDeErro(res, 'Erro ao cadastrar.'), 'bg-danger');
+                                }
+                            } catch (err) {
+                                mostrarToast('Falha na comunicação.', 'bg-danger');
+                            }
+                        });
+                    }
+
+                    const cpfInput = document.getElementById('cpf');
+                    if (cpfInput) IMask(cpfInput, { mask: '000.000.000-00' });
+                    const cnhInput = document.getElementById('cnh');
+                    if (cnhInput) IMask(cnhInput, { mask: '00000000000' });
+                    const telInput = document.getElementById('telefone');
+                    if (telInput) IMask(telInput, { mask: '(00) 00000-0000' });
+
+<<<<<<< HEAD
+                    UI.ligarBusca('busca', 'tabelaMotoristas');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                    carregarMotoristas();
+                })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Entregas - Transportadora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<<<<<<< HEAD
+    <link href="estilos/app.css" rel="stylesheet">
+</head>
+<body data-pagina="entregas">
+
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside id="sidebarHost" class="sidebar"></aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-main">
+
+            <div class="pagina-cabecalho">
+=======
+    <link href="css/global.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link active">📦 Entregas</a></li>
+            </ul>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Painel de Entregas</h2>
+                    <p class="text-muted m-0 mt-1">Gestão de fretes, atribuição de rotas e status operacional.</p>
+                </div>
+                <!-- Botão Novo Registo restrito apenas a Admin/Operador no JS -->
+                <button id="btnNovaEntrega" class="btn btn-primary shadow-sm fw-bold px-4 d-none" data-bs-toggle="modal" data-bs-target="#modalNovaEntrega">
+                    + Nova Entrega
+                </button>
+            </div>
+
+<<<<<<< HEAD
+            <div class="barra-ferramentas">
+                <input type="search" id="busca" class="form-control campo-busca" placeholder="Buscar por código, cliente, motorista ou rota..." aria-label="Buscar">
+                <select id="filtroStatus" class="form-select" style="max-width: 220px;" aria-label="Filtrar por status">
+                    <option value="">Todos os status</option>
+                    <option value="0">Pendente</option>
+                    <option value="1">Em trânsito</option>
+                    <option value="2">Concluída</option>
+                    <option value="3">Ocorrência</option>
+                </select>
+            </div>
+
+            <div class="card p-0 overflow-hidden">
+=======
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">Cód</th>
+                                <th class="py-3 text-muted">Cliente</th>
+                                <th class="py-3 text-muted">Motorista</th>
+                                <th class="py-3 text-muted">Veículo</th>
+                                <th class="py-3 text-muted">Rota</th>
+                                <th class="py-3 text-muted">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaEntregas" class="border-top-0"></tbody>
+                    </table>
+                </div>
+            </div>
+<<<<<<< HEAD
+        </main>
+=======
+        </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+    </div>
+
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal fade" id="modalNovaEntrega" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Criar Nova Entrega</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEntrega" class="needs-validation" novalidate>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">CLIENTE CONTRATANTE</label>
+                                <select id="clienteId" class="form-select form-select-lg fs-6 bg-light" required>
+                                    <option value="">A carregar clientes...</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione um cliente.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">MOTORISTA RESPONSÁVEL</label>
+                                <select id="motoristaId" class="form-select form-select-lg fs-6 bg-light" required>
+                                    <option value="">A carregar motoristas...</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione um motorista.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">VEÍCULO ALOCADO</label>
+                                <select id="veiculoId" class="form-select form-select-lg fs-6 bg-light" required>
+                                    <option value="">A carregar veículos...</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione um veículo.</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">ENDEREÇO DE ORIGEM</label>
+                                <input type="text" id="enderecoOrigem" class="form-control form-control-lg fs-6 bg-light" maxlength="200" required>
+                                <div class="invalid-feedback">Informe o endereço de origem.</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold mb-1">ENDEREÇO DE DESTINO</label>
+                                <input type="text" id="enderecoDestino" class="form-control form-control-lg fs-6 bg-light" maxlength="200" required>
+                                <div class="invalid-feedback">Informe o endereço de destino.</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Atribuir Rota</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+<<<<<<< HEAD
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/layout.js"></script>
+=======
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <script>
+                // @ts-nocheck
+
+<<<<<<< HEAD
+                
+=======
+                function mostrarToast(mensagem, corFundo) {
+                    const toastEl = document.getElementById('toastNotificacao');
+                    const toastMsg = document.getElementById('toastMensagem');
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
+                    toastMsg.textContent = mensagem;
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+                }
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+                (function () {
+                    if (!exigirLogin()) return;
+
+                    const perfil = localStorage.getItem('perfilAcesso');
+                    if (perfil === 'admin' || perfil === 'operador') {
+                        document.getElementById('btnNovaEntrega').classList.remove('d-none');
+                    }
+
+                    // O motorista só enxerga as próprias entregas.
+                    const ROTA_LISTA = perfil === 'motorista' ? '/Entregas/minhas' : '/Entregas';
+
+                    function preencherSelect(id, rotuloVazio, itens, textoDe) {
+                        const sel = document.getElementById(id);
+                        sel.innerHTML = '';
+                        sel.add(new Option(rotuloVazio, ''));
+                        itens.forEach(i => sel.add(new Option(textoDe(i), i.id)));
+                    }
+
+                    // 1. Preenche os selects do formulário (Cliente, Motorista, Veículo)
+                    async function carregarDependencias() {
+                        if (perfil === 'motorista') return;
+                        try {
+                            const [resCli, resMot, resVei] = await Promise.all([
+                                apiFetch('/Clientes'),
+                                apiFetch('/Motoristas'),
+                                apiFetch('/Veiculos')
+                            ]);
+                            if (!resCli.ok || !resMot.ok || !resVei.ok) throw new Error('Falha ao carregar listas');
+
+                            const [clientes, motoristas, veiculos] =
+                                await Promise.all([resCli.json(), resMot.json(), resVei.json()]);
+
+                            preencherSelect('clienteId', 'Selecione o Cliente...', clientes, c => c.razaoSocial);
+                            preencherSelect('motoristaId', 'Selecione o Motorista...', motoristas, m => m.nome);
+                            preencherSelect('veiculoId', 'Selecione o Veículo...', veiculos, v => `${v.modelo} (${v.placa})`);
+                        } catch (err) {
+                            console.error('Erro ao carregar selects', err);
+                            mostrarToast('Erro ao carregar dados auxiliares.', 'bg-danger');
+                        }
+                    }
+
+                    // 2. Carrega as entregas na tabela
+                    async function carregarEntregas() {
+                        const tbody = document.getElementById('tabelaEntregas');
+<<<<<<< HEAD
+                        UI.carregando('tabelaEntregas', 6);
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                        try {
+                            const res = await apiFetch(ROTA_LISTA);
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                            const entregas = await res.json();
+                            if (entregas.length === 0) {
+<<<<<<< HEAD
+                                UI.vazio('tabelaEntregas', 6, 'Nenhuma entrega registrada.');
+=======
+                                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Nenhuma entrega registrada.</td></tr>';
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                                return;
+                            }
+
+                            tbody.innerHTML = entregas.map((e) => {
+<<<<<<< HEAD
+                                return `
+                                    <tr data-status="${esc(e.status)}">
+=======
+                                const st = STATUS_ENTREGA[e.status] || { rotulo: e.statusDescricao || '-', classe: 'bg-secondary' };
+                                return `
+                                    <tr>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                                        <td class="px-4 fw-bold text-secondary py-3">${esc(e.codigoRastreio)}</td>
+                                        <td class="fw-medium text-dark py-3">${esc(e.clienteNome)}</td>
+                                        <td class="text-secondary py-3">${esc(e.motoristaNome)}</td>
+                                        <td class="text-secondary py-3">${esc(e.veiculoPlaca)}</td>
+                                        <td class="text-secondary py-3 small">${esc(e.enderecoOrigem)} &rarr; ${esc(e.enderecoDestino)}</td>
+<<<<<<< HEAD
+                                        <td class="py-3">${badgeStatus(e.status, e.statusDescricao)}</td>
+=======
+                                        <td class="py-3"><span class="badge ${st.classe}">${esc(st.rotulo)}</span></td>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                                    </tr>`;
+                            }).join('');
+                        } catch (err) {
+                            console.error('Erro ao carregar entregas', err);
+<<<<<<< HEAD
+                            UI.erro('tabelaEntregas', 6, 'Não foi possível carregar as entregas.');
+=======
+                            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Não foi possível carregar as entregas.</td></tr>';
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                        }
+                    }
+
+                    const form = document.getElementById('formEntrega');
+                    if (form) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            if (!form.checkValidity()) {
+                                e.stopPropagation();
+                                form.classList.add('was-validated');
+                                return;
+                            }
+
+                            // O status inicial (Pendente) e o código de rastreio são definidos pela API.
+                            const entrega = {
+                                clienteId: parseInt(document.getElementById('clienteId').value, 10),
+                                motoristaId: parseInt(document.getElementById('motoristaId').value, 10),
+                                veiculoId: parseInt(document.getElementById('veiculoId').value, 10),
+                                enderecoOrigem: document.getElementById('enderecoOrigem').value.trim(),
+                                enderecoDestino: document.getElementById('enderecoDestino').value.trim()
+                            };
+
+                            try {
+                                const res = await apiFetch('/Entregas', {
+                                    method: 'POST',
+                                    body: JSON.stringify(entrega)
+                                });
+
+                                if (res.ok) {
+                                    mostrarToast('Entrega criada com sucesso!', 'bg-success');
+                                    form.reset();
+                                    form.classList.remove('was-validated');
+                                    carregarEntregas();
+
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovaEntrega'));
+                                    if (modalInstance) modalInstance.hide();
+                                } else {
+                                    mostrarToast(await mensagemDeErro(res, 'Erro ao criar a entrega.'), 'bg-danger');
+                                }
+                            } catch (err) {
+                                mostrarToast('Falha na comunicação com a API.', 'bg-danger');
+                            }
+                        });
+                    }
+
+<<<<<<< HEAD
+                    const filtroStatus = document.getElementById('filtroStatus');
+                    const aplicarFiltro = UI.ligarBusca('busca', 'tabelaEntregas',
+                        function (tr) { return !filtroStatus.value || tr.dataset.status === filtroStatus.value; });
+                    filtroStatus.addEventListener('change', aplicarFiltro);
+
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                    carregarDependencias();
+                    carregarEntregas();
+                })();
+    </script>
+</body>
+</html>

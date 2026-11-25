@@ -1,0 +1,12 @@
+**/.vs
+**/.git
+**/bin
+**/obj
+**/node_modules
+<<<<<<< HEAD
+transpim_motorista
+docs
+*.md
+Transportadora.Tests
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d

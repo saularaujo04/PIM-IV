@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Clientes - Transportadora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Importação do nosso CSS Clean SaaS -->
+<<<<<<< HEAD
+    <link href="estilos/app.css" rel="stylesheet">
+</head>
+<body data-pagina="clientes">
+
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside id="sidebarHost" class="sidebar"></aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-main">
+
+            <!-- Cabeçalho da Página com Botão de Novo Registo -->
+            <div class="pagina-cabecalho">
+=======
+    <link href="css/global.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link active">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link">📦 Entregas</a></li>
+            </ul>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <!-- Cabeçalho da Página com Botão de Novo Registo -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Clientes Cadastrados</h2>
+                    <p class="text-muted m-0 mt-1">Lista completa de parceiros e contratantes da transportadora.</p>
+                </div>
+                <!-- Aciona o Modal -->
+                <button class="btn btn-primary shadow-sm fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalNovoCliente">
+                    + Novo Cliente
+                </button>
+            </div>
+
+            <!-- Tabela Ocupando 100% da área útil -->
+<<<<<<< HEAD
+            <div class="barra-ferramentas">
+                <input type="search" id="busca" class="form-control campo-busca" placeholder="Buscar por nome, documento ou e-mail..." aria-label="Buscar">
+            </div>
+
+            <div class="card p-0 overflow-hidden">
+=======
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">ID</th>
+                                <th class="py-3 text-muted">Nome / Razão Social</th>
+                                <th class="py-3 text-muted">Documento</th>
+                                <th class="py-3 text-muted">E-mail</th>
+                                <th class="py-3 text-muted">Telefone</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaClientes" class="border-top-0"></tbody>
+                    </table>
+                </div>
+            </div>
+<<<<<<< HEAD
+        </main>
+=======
+        </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+    </div>
+
+    <!-- MODAL DE CADASTRO (Janela Flutuante) -->
+    <div class="modal fade" id="modalNovoCliente" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark" id="modalLabel">Cadastrar Novo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+
+                    <!-- Formulário Blindado com Validação -->
+                    <form id="formCliente" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">NOME / RAZÃO SOCIAL</label>
+                            <input type="text" id="nome" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O nome é obrigatório.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CPF / CNPJ</label>
+                            <input type="text" id="documento" class="form-control form-control-lg fs-6 bg-light" required minlength="14">
+                            <div class="invalid-feedback">Informe um CPF ou CNPJ válido.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">E-MAIL CORPORATIVO</label>
+                            <input type="email" id="email" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">Informe um e-mail válido.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">TELEFONE DE CONTATO</label>
+                            <input type="text" id="telefone" class="form-control form-control-lg fs-6 bg-light" required minlength="14">
+                            <div class="invalid-feedback">O telefone é obrigatório.</div>
+                        </div>
+                        <div class="mt-5 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Salvar Cliente</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST DE NOTIFICAÇÃO -->
+<<<<<<< HEAD
+=======
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script src="js/app.js"></script>
+<<<<<<< HEAD
+    <script src="js/layout.js"></script>
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <script>
+                // @ts-nocheck
+
+<<<<<<< HEAD
+                
+=======
+                function mostrarToast(mensagem, corFundo) {
+                    const toastEl = document.getElementById('toastNotificacao');
+                    const toastMsg = document.getElementById('toastMensagem');
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
+                    toastMsg.textContent = mensagem;
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+                }
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+                (function () {
+                    if (!exigirLogin()) return;
+                    const API_URL = '/Clientes';
+
+                    async function carregarClientes() {
+<<<<<<< HEAD
+                        UI.carregando('tabelaClientes', 5);
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                        try {
+                            const res = await apiFetch(API_URL);
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+                            const clientes = await res.json();
+                            const tbody = document.getElementById('tabelaClientes');
+                            if (!tbody) return;
+
+                            tbody.innerHTML = '';
+<<<<<<< HEAD
+                            if (clientes.length === 0) { UI.vazio('tabelaClientes', 5, 'Nenhum cliente cadastrado ainda.'); return; }
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            clientes.forEach((c) => {
+                                tbody.insertAdjacentHTML('beforeend', `
+                                    <tr>
+                                        <td class="px-4 fw-bold text-secondary py-3">${esc(c.id)}</td>
+                                        <td class="fw-medium text-dark py-3">${esc(c.razaoSocial)}</td>
+                                        <td class="text-secondary py-3">${esc(c.cnpj)}</td>
+                                        <td class="text-secondary py-3">${esc(c.email)}</td>
+                                        <td class="text-secondary py-3">${esc(c.telefone)}</td>
+                                    </tr>`);
+                            });
+                        } catch (err) {
+<<<<<<< HEAD
+                            UI.erro('tabelaClientes', 5, 'Não foi possível carregar os clientes.');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            mostrarToast('Erro ao carregar a lista de clientes.', 'bg-danger');
+                        }
+                    }
+
+                    const form = document.getElementById('formCliente');
+                    if (form) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+<<<<<<< HEAD
+                            validarCampo('documento', validarCpfOuCnpj(document.getElementById('documento').value), 'CPF ou CNPJ inválido.');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            if (!form.checkValidity()) {
+                                e.stopPropagation();
+                                form.classList.add('was-validated');
+                                return;
+                            }
+
+                            const cliente = {
+                                nome: document.getElementById('nome').value,
+                                documento: document.getElementById('documento').value,
+                                email: document.getElementById('email').value,
+                                telefone: document.getElementById('telefone').value
+                            };
+
+                            try {
+                                const res = await apiFetch(API_URL, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(cliente)
+                                });
+
+                                if (res.ok) {
+                                    mostrarToast('Cliente cadastrado com sucesso!', 'bg-success');
+                                    form.reset();
+                                    form.classList.remove('was-validated');
+                                    carregarClientes();
+
+                                    // FECHA O MODAL AUTOMATICAMENTE APÓS O SUCESSO!
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovoCliente'));
+                                    if(modalInstance) modalInstance.hide();
+
+                                } else {
+                                    mostrarToast(await mensagemDeErro(res, 'Erro ao cadastrar cliente.'), 'bg-danger');
+                                }
+                            } catch (err) {
+                                mostrarToast('Falha na comunicação com a API.', 'bg-danger');
+                            }
+                        });
+                    }
+
+                    // Máscaras IMask
+                    const docInput = document.getElementById('documento');
+                    if (docInput) IMask(docInput, { mask: [{ mask: '000.000.000-00' }, { mask: '00.000.000/0000-00' }] });
+
+                    const telInput = document.getElementById('telefone');
+                    if (telInput) IMask(telInput, { mask: '(00) 00000-0000' });
+
+<<<<<<< HEAD
+                    UI.ligarBusca('busca', 'tabelaClientes');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                    carregarClientes();
+                })();
+    </script>
+</body>
+</html>

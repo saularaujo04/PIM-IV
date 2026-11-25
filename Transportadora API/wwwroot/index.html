@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
+    <title>Início - TransPIM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="estilos/app.css" rel="stylesheet">
+</head>
+<body data-pagina="index">
+
+    <div class="app-shell">
+        <aside id="sidebarHost" class="sidebar"></aside>
+
+        <main class="app-main">
+            <div class="pagina-cabecalho">
+                <div>
+                    <h2 id="tituloBoasVindas">Painel operacional</h2>
+                    <p id="subtituloBoasVindas">Acompanhe as entregas e acesse os módulos do sistema.</p>
+                </div>
+            </div>
+
+            <!-- Indicadores por status -->
+            <div class="row g-3 mb-4" id="indicadores">
+                <div class="col-6 col-lg-3"><div class="card kpi s0"><div class="faixa"></div><div class="valor" id="kpi0">–</div><div class="rotulo">Pendentes</div></div></div>
+                <div class="col-6 col-lg-3"><div class="card kpi s1"><div class="faixa"></div><div class="valor" id="kpi1">–</div><div class="rotulo">Em trânsito</div></div></div>
+                <div class="col-6 col-lg-3"><div class="card kpi s2"><div class="faixa"></div><div class="valor" id="kpi2">–</div><div class="rotulo">Concluídas</div></div></div>
+                <div class="col-6 col-lg-3"><div class="card kpi s3"><div class="faixa"></div><div class="valor" id="kpi3">–</div><div class="rotulo">Com ocorrência</div></div></div>
+            </div>
+
+            <!-- Atalhos (filtrados pelo perfil em JS) -->
+            <div class="row g-3 mb-4" id="atalhos"></div>
+
+            <!-- Gráfico (admin/operador) -->
+            <div class="card p-4" id="secaoGrafico">
+                <h5 class="fw-bold mb-3">Entregas por status</h5>
+                <div style="height: 280px; width: 100%;"><canvas id="graficoEntregas"></canvas></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/layout.js"></script>
+    <script>
+        // @ts-nocheck
+        (function () {
+            if (!exigirLogin()) return;
+            const perfil = localStorage.getItem('perfilAcesso');
+            const nome = localStorage.getItem('usuarioNome') || '';
+
+            document.getElementById('tituloBoasVindas').textContent = nome ? 'Olá, ' + nome.split(' ')[0] : 'Painel operacional';
+            if (perfil === 'motorista') {
+                document.getElementById('subtituloBoasVindas').textContent = 'Resumo das suas entregas.';
+                document.getElementById('secaoGrafico').classList.add('d-none');
+            }
+
+            // Atalhos conforme o perfil
+            const ATALHOS = [
+                { href: 'entregas.html',   icone: '📦', titulo: 'Entregas',   desc: perfil === 'motorista' ? 'Veja as suas entregas.' : 'Crie e acompanhe as entregas.', perfis: ['admin', 'operador', 'motorista'] },
+                { href: 'clientes.html',   icone: '👥', titulo: 'Clientes',   desc: 'Contratantes e parceiros.',  perfis: ['admin'] },
+                { href: 'motoristas.html', icone: '🪪', titulo: 'Motoristas', desc: 'Equipe, CPF e CNH.',         perfis: ['admin', 'operador'] },
+                { href: 'veiculos.html',   icone: '🚚', titulo: 'Veículos',   desc: 'Frota, placas e capacidade.', perfis: ['admin', 'operador'] }
+            ];
+            document.getElementById('atalhos').innerHTML = ATALHOS
+                .filter(function (a) { return a.perfis.includes(perfil); })
+                .map(function (a) {
+                    return '<div class="col-6 col-lg-3"><a class="card atalho" href="' + a.href + '">' +
+                        '<span class="icone" aria-hidden="true">' + a.icone + '</span>' +
+                        '<span class="titulo">' + esc(a.titulo) + '</span>' +
+                        '<span class="desc">' + esc(a.desc) + '</span></a></div>';
+                }).join('');
+
+            // Indicadores e gráfico com dados reais (motorista vê só as próprias entregas)
+            const rota = perfil === 'motorista' ? '/Entregas/minhas' : '/Entregas';
+            apiFetch(rota)
+                .then(function (r) { return r.ok ? r.json() : []; })
+                .then(function (lista) {
+                    const contagem = [0, 0, 0, 0];
+                    lista.forEach(function (e) { if (contagem[e.status] !== undefined) contagem[e.status]++; });
+                    contagem.forEach(function (v, i) { document.getElementById('kpi' + i).textContent = v; });
+
+                    const canvas = document.getElementById('graficoEntregas');
+                    if (perfil !== 'motorista' && canvas) {
+                        new Chart(canvas.getContext('2d'), {
+                            type: 'bar',
+                            data: {
+                                labels: ['Pendentes', 'Em trânsito', 'Concluídas', 'Ocorrências'],
+                                datasets: [{
+                                    data: contagem,
+                                    backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#ef4444'],
+                                    borderRadius: 6,
+                                    maxBarThickness: 56
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                            }
+                        });
+                    }
+                })
+                .catch(function () {
+                    mostrarToast('Não foi possível carregar os indicadores.', 'bg-danger');
+                });
+        })();
+    </script>
+</body>
+</html>
+=======
+    <title>Dashboard - Transportadora PIM IV</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/global.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR (Menu Lateral) -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link active">🏠 Início</a></li>
+                <li class="item-permissao" id="navClientes"><a href="clientes.html" class="nav-link">👥 Clientes</a></li>
+                <li class="item-permissao" id="navMotoristas"><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li class="item-permissao" id="navVeiculos"><a href="veiculos.html" class="nav-link">🚚 Veículos</a></li>
+                <li class="item-permissao" id="navEntregas"><a href="entregas.html" class="nav-link">📦 Entregas</a></li>
+            </ul>
+            <hr class="text-white-50">
+            <div class="d-flex align-items-center justify-content-between mt-2">
+                <span id="badgePerfil" class="badge bg-secondary fs-7 px-3 py-2"></span>
+                <button id="btnLogout" class="btn btn-sm btn-outline-light">Sair</button>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+            <div class="mb-5">
+                <h2 class="fw-bold m-0" id="tituloBoasVindas">Painel Operacional</h2>
+                <p class="text-muted m-0 mt-1" id="subtituloBoasVindas">Selecione um módulo para gerenciar a operação.</p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-3 card-modulo" id="cardClientes">
+                    <div class="card h-100 p-4 text-center border-0 shadow-sm">
+                        <h5 class="fw-bold text-dark">Clientes</h5>
+                        <p class="text-muted small mb-4">Gestão dos contratantes e parceiros de negócio.</p>
+                        <a href="clientes.html" class="btn btn-outline-primary mt-auto">Acessar Módulo</a>
+                    </div>
+                </div>
+                <div class="col-md-3 card-modulo" id="cardMotoristas">
+                    <div class="card h-100 p-4 text-center border-0 shadow-sm">
+                        <h5 class="fw-bold text-dark">Motoristas</h5>
+                        <p class="text-muted small mb-4">Controle da equipa, documentação e CNHs.</p>
+                        <a href="motoristas.html" class="btn btn-outline-primary mt-auto">Acessar Módulo</a>
+                    </div>
+                </div>
+                <div class="col-md-3 card-modulo" id="cardVeiculos">
+                    <div class="card h-100 p-4 text-center border-0 shadow-sm">
+                        <h5 class="fw-bold text-dark">Veículos</h5>
+                        <p class="text-muted small mb-4">Gestão da frota, placas e capacidades de carga.</p>
+                        <a href="veiculos.html" class="btn btn-outline-primary mt-auto">Acessar Módulo</a>
+                    </div>
+                </div>
+                <div class="col-md-3 card-modulo" id="cardEntregas">
+                    <div class="card h-100 p-4 text-center border-0 shadow-sm text-white" style="background-color: #0ea5e9;">
+                        <h5 class="fw-bold text-white">Entregas</h5>
+                        <p class="text-light small mb-4 opacity-75">Controle de fretes, rotas operacionais e status.</p>
+                        <a href="entregas.html" class="btn btn-light text-primary mt-auto fw-bold shadow-sm">Painel de Entregas</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico Chart.js -->
+            <div class="row" id="seccaoDashboard">
+                <div class="col-md-12">
+                    <div class="card p-4 border-0 shadow-sm">
+                        <h5 class="fw-bold mb-4 text-secondary">Status Geral das Entregas (Visão Geral)</h5>
+                        <div style="height: 300px; width: 100%;">
+                            <canvas id="graficoEntregas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+                // @ts-nocheck
+                (function () {
+                    if (!exigirLogin()) return;
+                    const perfil = localStorage.getItem('perfilAcesso');
+
+                    const badgePerfil = document.getElementById('badgePerfil');
+                    const titulo = document.getElementById('tituloBoasVindas');
+                    const subtitulo = document.getElementById('subtituloBoasVindas');
+                    const seccaoDashboard = document.getElementById('seccaoDashboard');
+
+                    if (perfil === 'admin') {
+                        if(badgePerfil) badgePerfil.className = 'badge bg-danger fs-7 px-3 py-2';
+                        if(badgePerfil) badgePerfil.innerText = 'Administrador';
+                        if(titulo) titulo.innerText = 'Painel Administrativo';
+                    } else if (perfil === 'operador') {
+                        if(badgePerfil) badgePerfil.className = 'badge bg-warning text-dark fs-7 px-3 py-2';
+                        if(badgePerfil) badgePerfil.innerText = 'Operador';
+                        document.getElementById('navClientes')?.classList.add('d-none');
+                        document.getElementById('cardClientes')?.classList.add('d-none');
+                    } else if (perfil === 'motorista') {
+                        if(badgePerfil) badgePerfil.className = 'badge bg-info text-dark fs-7 px-3 py-2';
+                        if(badgePerfil) badgePerfil.innerText = 'Motorista';
+
+                        document.querySelectorAll('.item-permissao').forEach(el => {
+                            if(el.id !== 'navEntregas') el.classList.add('d-none');
+                        });
+                        document.querySelectorAll('.card-modulo').forEach(el => {
+                            if(el.id !== 'cardEntregas') el.classList.add('d-none');
+                        });
+
+                        seccaoDashboard?.classList.add('d-none');
+                    }
+
+                    document.getElementById('btnLogout')?.addEventListener('click', sair);
+
+                    if (perfil === 'admin' || perfil === 'operador') {
+                        const canvas = document.getElementById('graficoEntregas');
+                        if(canvas) {
+                            const grafico = new Chart(canvas.getContext('2d'), {
+                                type: 'bar',
+                                data: {
+                                    labels: ['Pendentes', 'Em Rota', 'Entregues', 'Problemas'],
+                                    datasets: [{
+                                        label: 'Volume de Entregas',
+                                        data: [0, 0, 0, 0],
+                                        backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#ef4444'],
+                                        borderRadius: 6,
+                                        barThickness: 40
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { display: false } }
+                                }
+                            });
+
+                            // Dados reais: conta as entregas por status (0 a 3)
+                            apiFetch('/Entregas')
+                                .then(r => r.ok ? r.json() : [])
+                                .then(lista => {
+                                    const contagem = [0, 0, 0, 0];
+                                    lista.forEach(e => { if (contagem[e.status] !== undefined) contagem[e.status]++; });
+                                    grafico.data.datasets[0].data = contagem;
+                                    grafico.update();
+                                })
+                                .catch(() => { /* mantém o gráfico zerado */ });
+                        }
+                    }
+                })();
+    </script>
+</body>
+</html>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d

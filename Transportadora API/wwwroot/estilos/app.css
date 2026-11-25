@@ -1,0 +1,274 @@
+/* =============================================================================
+   TransPIM — estilos do painel web (um único arquivo para todas as páginas)
+   Cores e espaçamentos ficam em variáveis; o app Flutter usa a mesma paleta.
+   ============================================================================= */
+:root {
+    --marca: #0ea5e9;
+    --marca-escura: #0284c7;
+    --sidebar-bg: #0f172a;
+    --sidebar-hover: #1e293b;
+    --fundo: #f1f5f9;
+    --superficie: #ffffff;
+    --texto: #0f172a;
+    --texto-suave: #64748b;
+    --borda: #e2e8f0;
+
+    /* Status da entrega (mesmas cores do app e do gráfico) */
+    --st-pendente: #f59e0b;
+    --st-transito: #3b82f6;
+    --st-concluida: #10b981;
+    --st-ocorrencia: #ef4444;
+
+    --raio: 12px;
+    --sombra: 0 1px 3px rgba(15, 23, 42, .06), 0 4px 12px rgba(15, 23, 42, .05);
+
+    /* Ajusta o Bootstrap para a paleta da marca */
+    --bs-primary: #0ea5e9;
+    --bs-primary-rgb: 14, 165, 233;
+    --bs-link-color: #0284c7;
+    --bs-link-hover-color: #0369a1;
+    --bs-body-color: #0f172a;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--fundo);
+    color: var(--texto);
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--marca);
+    --bs-btn-border-color: var(--marca);
+    --bs-btn-hover-bg: var(--marca-escura);
+    --bs-btn-hover-border-color: var(--marca-escura);
+    --bs-btn-active-bg: #0369a1;
+    --bs-btn-active-border-color: #0369a1;
+    --bs-btn-disabled-bg: var(--marca);
+    --bs-btn-disabled-border-color: var(--marca);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--marca-escura);
+    --bs-btn-border-color: var(--marca);
+    --bs-btn-hover-bg: var(--marca);
+    --bs-btn-hover-border-color: var(--marca);
+    --bs-btn-active-bg: var(--marca-escura);
+}
+
+.btn { border-radius: 8px; font-weight: 600; }
+
+:focus-visible { outline: 3px solid rgba(14, 165, 233, .45); outline-offset: 2px; }
+
+/* ---------- Cartões ---------- */
+.card {
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    box-shadow: var(--sombra);
+    background: var(--superficie);
+}
+
+/* ---------- Estrutura da página ---------- */
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 260px;
+    flex: 0 0 260px;
+    background: var(--sidebar-bg);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-marca {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -.01em;
+    padding: 0 .5rem 1.5rem;
+}
+.sidebar-marca .logo {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--marca);
+    font-size: 1.1rem;
+}
+
+.sidebar .nav-link {
+    color: #cbd5e1;
+    border-radius: 10px;
+    padding: .7rem .9rem;
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    font-weight: 500;
+}
+.sidebar .nav-link:hover { background: var(--sidebar-hover); color: #fff; }
+.sidebar .nav-link.active { background: var(--marca); color: #fff; }
+
+.sidebar-usuario {
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+.sidebar-usuario .nome { font-weight: 600; word-break: break-word; }
+.sidebar-usuario .acoes { display: flex; gap: .5rem; margin-top: .75rem; flex-wrap: wrap; }
+
+.app-main { flex: 1 1 auto; min-width: 0; padding: 2rem 2.5rem; }
+
+.pagina-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+}
+.pagina-cabecalho h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.01em; margin: 0; }
+.pagina-cabecalho p { margin: .25rem 0 0; color: var(--texto-suave); }
+
+.barra-ferramentas { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+.barra-ferramentas .campo-busca { max-width: 360px; flex: 1 1 220px; }
+
+/* Barra superior e menu deslizante no celular */
+.topbar-mobile { display: none; }
+.sidebar-fundo { display: none; }
+
+@media (max-width: 991.98px) {
+    .app-shell { flex-direction: column; }
+
+    .topbar-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        background: var(--sidebar-bg);
+        color: #fff;
+        padding: .7rem 1rem;
+    }
+    .topbar-mobile .marca { font-weight: 800; }
+    .topbar-mobile button {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, .3);
+        color: #fff;
+        border-radius: 8px;
+        padding: .25rem .65rem;
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        z-index: 1045;
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+    }
+    .sidebar.aberta { transform: none; box-shadow: 8px 0 24px rgba(0, 0, 0, .3); }
+
+    .sidebar-fundo.aberto {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, .55);
+        z-index: 1040;
+    }
+
+    .app-main { padding: 1.25rem 1rem; }
+    .pagina-cabecalho h2 { font-size: 1.3rem; }
+}
+
+/* ---------- Tabelas ---------- */
+.table { vertical-align: middle; }
+.table thead th {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--texto-suave);
+    font-weight: 700;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--borda);
+    white-space: nowrap;
+}
+.table tbody td { padding-top: .85rem; padding-bottom: .85rem; }
+
+.estado-vazio, .estado-erro { text-align: center; color: var(--texto-suave); padding: 2.5rem 1rem !important; }
+.estado-erro { color: #b91c1c; }
+
+.skeleton {
+    display: block;
+    height: 1rem;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background-size: 200% 100%;
+    animation: brilho 1.2s linear infinite;
+}
+@keyframes brilho { to { background-position: -200% 0; } }
+
+/* ---------- Status da entrega ---------- */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .7rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #334155;
+}
+.badge-status::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
+.badge-status.s0 { background: #fef3c7; color: #b45309; }
+.badge-status.s1 { background: #dbeafe; color: #1d4ed8; }
+.badge-status.s2 { background: #d1fae5; color: #047857; }
+.badge-status.s3 { background: #fee2e2; color: #b91c1c; }
+
+/* ---------- Indicadores (dashboard) ---------- */
+.kpi { padding: 1.25rem; height: 100%; }
+.kpi .valor { font-size: 2rem; font-weight: 800; line-height: 1.1; }
+.kpi .rotulo { color: var(--texto-suave); font-size: .85rem; font-weight: 600; }
+.kpi .faixa { width: 36px; height: 4px; border-radius: 4px; margin-bottom: .75rem; }
+.kpi.s0 .faixa { background: var(--st-pendente); }
+.kpi.s1 .faixa { background: var(--st-transito); }
+.kpi.s2 .faixa { background: var(--st-concluida); }
+.kpi.s3 .faixa { background: var(--st-ocorrencia); }
+
+.atalho { display: flex; flex-direction: column; gap: .35rem; padding: 1.25rem; height: 100%; text-decoration: none; color: inherit; transition: transform .15s, box-shadow .15s; }
+.atalho:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, .1); color: inherit; }
+.atalho .icone { font-size: 1.6rem; }
+.atalho .titulo { font-weight: 700; }
+.atalho .desc { color: var(--texto-suave); font-size: .85rem; }
+
+/* ---------- Formulários e modais ---------- */
+.modal-content { border: 0; border-radius: var(--raio); }
+.form-control, .form-select { border-radius: 8px; }
+.form-control:focus, .form-select:focus { border-color: var(--marca); box-shadow: 0 0 0 .2rem rgba(14, 165, 233, .2); }
+
+/* ---------- Login ---------- */
+.login-fundo {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: radial-gradient(circle at 20% 10%, #1e3a5f 0, var(--sidebar-bg) 55%);
+}
+.login-cartao { width: 100%; max-width: 420px; padding: 2.25rem; }
+.login-cartao .logo { width: 52px; height: 52px; border-radius: 14px; background: var(--marca); display: grid; place-items: center; font-size: 1.6rem; margin: 0 auto 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Veículos - Transportadora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<<<<<<< HEAD
+    <link href="estilos/app.css" rel="stylesheet">
+</head>
+<body data-pagina="veiculos">
+
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside id="sidebarHost" class="sidebar"></aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-main">
+
+            <div class="pagina-cabecalho">
+=======
+    <link href="css/global.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="d-flex h-100 vh-100">
+        <!-- SIDEBAR -->
+        <div class="sidebar p-4 d-flex flex-column" style="width: 260px;">
+            <h4 class="fw-bold mb-5 text-white">Logística PIM IV</h4>
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li><a href="index.html" class="nav-link">🏠 Início</a></li>
+                <li><a href="clientes.html" class="nav-link">👥 Clientes</a></li>
+                <li><a href="motoristas.html" class="nav-link">🪪 Motoristas</a></li>
+                <li><a href="veiculos.html" class="nav-link active">🚚 Veículos</a></li>
+                <li><a href="entregas.html" class="nav-link">📦 Entregas</a></li>
+            </ul>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="flex-grow-1 p-5 overflow-auto">
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div>
+                    <h2 class="fw-bold m-0 text-dark">Frota de Veículos</h2>
+                    <p class="text-muted m-0 mt-1">Gestão de viaturas, placas e capacidade de carga.</p>
+                </div>
+                <button class="btn btn-primary shadow-sm fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalNovoVeiculo">
+                    + Novo Veículo
+                </button>
+            </div>
+
+<<<<<<< HEAD
+            <div class="barra-ferramentas">
+                <input type="search" id="busca" class="form-control campo-busca" placeholder="Buscar por placa, modelo ou tipo..." aria-label="Buscar">
+            </div>
+
+            <div class="card p-0 overflow-hidden">
+=======
+            <div class="card border-0 shadow-sm p-0 overflow-hidden">
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">ID</th>
+                                <th class="py-3 text-muted">Placa</th>
+                                <th class="py-3 text-muted">Modelo</th>
+                                <th class="py-3 text-muted">Capacidade (Kg)</th>
+                                <th class="py-3 text-muted">Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaVeiculos" class="border-top-0"></tbody>
+                    </table>
+                </div>
+            </div>
+<<<<<<< HEAD
+        </main>
+=======
+        </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+    </div>
+
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal fade" id="modalNovoVeiculo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-dark">Cadastrar Novo Veículo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formVeiculo" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">PLACA</label>
+                            <input type="text" id="placa" class="form-control form-control-lg fs-6 bg-light" required minlength="8">
+                            <div class="invalid-feedback">Informe a placa.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">MODELO</label>
+                            <input type="text" id="modelo" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O modelo é obrigatório.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">CAPACIDADE (KG)</label>
+                            <input type="text" id="capacidadeKg" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">A capacidade é obrigatória.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold mb-1">TIPO (Ex: Caminhão, Van)</label>
+                            <input type="text" id="tipo" class="form-control form-control-lg fs-6 bg-light" required>
+                            <div class="invalid-feedback">O tipo é obrigatório.</div>
+                        </div>
+                        <div class="mt-5 text-end">
+                            <button type="button" class="btn btn-light fw-bold px-4 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary fw-bold px-5 shadow-sm">Salvar Veículo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+<<<<<<< HEAD
+=======
+    <div class="toast-container position-fixed top-0 end-0 p-4">
+        <div id="toastNotificacao" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script src="js/app.js"></script>
+<<<<<<< HEAD
+    <script src="js/layout.js"></script>
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+    <script>
+                // @ts-nocheck
+
+<<<<<<< HEAD
+                
+=======
+                function mostrarToast(mensagem, corFundo) {
+                    const toastEl = document.getElementById('toastNotificacao');
+                    const toastMsg = document.getElementById('toastMensagem');
+                    toastEl.className = `toast align-items-center text-white border-0 shadow-lg ${corFundo}`;
+                    toastMsg.textContent = mensagem;
+                    new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+                }
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+
+                (function () {
+                    if (!exigirLogin()) return;
+                    const API_URL = '/Veiculos';
+
+                    async function carregarVeiculos() {
+<<<<<<< HEAD
+                        UI.carregando('tabelaVeiculos', 5);
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                        try {
+                            const res = await apiFetch(API_URL);
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+                            const veiculos = await res.json();
+                            const tbody = document.getElementById('tabelaVeiculos');
+                            if (!tbody) return;
+
+                            tbody.innerHTML = '';
+<<<<<<< HEAD
+                            if (veiculos.length === 0) { UI.vazio('tabelaVeiculos', 5, 'Nenhum veículo cadastrado ainda.'); return; }
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            veiculos.forEach((v) => {
+                                tbody.insertAdjacentHTML('beforeend', `
+                                    <tr>
+                                        <td class="px-4 fw-bold text-secondary py-3">${esc(v.id)}</td>
+                                        <td class="fw-medium text-dark py-3">${esc(v.placa)}</td>
+                                        <td class="text-secondary py-3">${esc(v.modelo)}</td>
+                                        <td class="text-secondary py-3">${esc(Number(v.capacidadeKg).toLocaleString('pt-BR'))} kg</td>
+                                        <td class="text-secondary py-3">${esc(v.tipo)}</td>
+                                    </tr>`);
+                            });
+                        } catch (err) {
+<<<<<<< HEAD
+                            UI.erro('tabelaVeiculos', 5, 'Não foi possível carregar os veículos.');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            mostrarToast('Erro ao carregar a lista.', 'bg-danger');
+                        }
+                    }
+
+                    const form = document.getElementById('formVeiculo');
+                    if (form) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+<<<<<<< HEAD
+                            validarCampo('placa', validarPlaca(document.getElementById('placa').value), 'Placa inválida.');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            if (!form.checkValidity()) {
+                                e.stopPropagation();
+                                form.classList.add('was-validated');
+                                return;
+                            }
+
+                            let rawCapacidade = document.getElementById('capacidadeKg').value;
+                            rawCapacidade = rawCapacidade.replace(/\./g, '').replace(',', '.');
+
+                            const veiculo = {
+                                placa: document.getElementById('placa').value,
+                                modelo: document.getElementById('modelo').value,
+                                capacidadeKg: parseFloat(rawCapacidade) || 0,
+                                tipo: document.getElementById('tipo').value
+                            };
+
+                            try {
+                                const res = await apiFetch(API_URL, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(veiculo)
+                                });
+
+                                if (res.ok) {
+                                    mostrarToast('Veículo cadastrado com sucesso!', 'bg-success');
+                                    form.reset();
+                                    form.classList.remove('was-validated');
+                                    carregarVeiculos();
+
+                                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalNovoVeiculo'));
+                                    if(modalInstance) modalInstance.hide();
+                                } else {
+                                    mostrarToast(await mensagemDeErro(res, 'Erro ao cadastrar.'), 'bg-danger');
+                                }
+                            } catch (err) {
+                                mostrarToast('Falha na comunicação.', 'bg-danger');
+                            }
+                        });
+                    }
+
+                    const placaInput = document.getElementById('placa');
+                    if (placaInput) {
+                        IMask(placaInput, {
+<<<<<<< HEAD
+                            mask: 'aaa-0*00', // aceita placa antiga (ABC-1234) e Mercosul (ABC-1D23)
+=======
+                            mask: 'aaa-0000',
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                            prepare: function (str) { return str.toUpperCase(); }
+                        });
+                    }
+
+                    const capInput = document.getElementById('capacidadeKg');
+                    if (capInput) {
+                        IMask(capInput, {
+                            mask: Number,
+                            min: 0,
+                            thousandsSeparator: '.',
+                            radix: ','
+                        });
+                    }
+
+<<<<<<< HEAD
+                    UI.ligarBusca('busca', 'tabelaVeiculos');
+=======
+>>>>>>> 92e8d435a95bec0bbac803957557f44b4c03799d
+                    carregarVeiculos();
+                })();
+    </script>
+</body>
+</html>
